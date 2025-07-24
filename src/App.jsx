@@ -8,7 +8,10 @@ function App() {
     <div className="app-container">
       <h1 className="title">Welcome to Complaint Portal</h1>
       <div className="button-group">
-        <button className="btn" onClick={() => navigate("/register")}>
+        {/* <button className="btn" onClick={() => navigate("/register")}>
+          Register a Complaint
+        </button> */}
+        <button className="btn" onClick={() => navigate("/file-complaint")}>
           Register a Complaint
         </button>
         <button className="btn" onClick={() => navigate("/officer-login")}>
