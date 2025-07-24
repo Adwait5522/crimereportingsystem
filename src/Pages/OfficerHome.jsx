@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../Components/Footer";
+import "../styles/OfficerHome.css";
 
 const OfficerHome = () => {
   const navigate = useNavigate();
 
   // Simulated login - in production, get this from auth context or localStorage
-  const loggedInOfficerName = localStorage.getItem("officerName") || "Officer Tiwari";
+  const loggedInOfficerName =
+    localStorage.getItem("officerName") || "Officer Tiwari";
 
   const [statusFilter, setStatusFilter] = useState("All");
 
@@ -56,9 +59,7 @@ const OfficerHome = () => {
 
   const handleStatusChange = (caseId, newStatus) => {
     setCases((prevCases) =>
-      prevCases.map((c) =>
-        c.id === caseId ? { ...c, status: newStatus } : c
-      )
+      prevCases.map((c) => (c.id === caseId ? { ...c, status: newStatus } : c))
     );
   };
 
@@ -68,77 +69,81 @@ const OfficerHome = () => {
   };
 
   return (
-    <div className="container py-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3>Welcome, {loggedInOfficerName}</h3>
-        <button className="btn btn-outline-danger" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+    <div className="officer-home-container">
+      <div className="container officer-home-main">
+        <div className="officer-home-header">
+          <h3>Welcome, {loggedInOfficerName}</h3>
+          <button className="btn btn-secondary mb-3" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
 
-      <div className="mb-3">
-        <label className="form-label">Filter by Status:</label>
-        <select
-          className="form-select w-auto d-inline-block ms-2"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Investigating">Investigating</option>
-          <option value="Resolved">Resolved</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </div>
+        <div className="mb-3">
+          <label className="status-filter-label">Filter by Status:</label>
+          <select
+            className="status-filter-select"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Investigating">Investigating</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
 
-      {filteredCases.length > 0 ? (
-        <table className="table table-bordered table-striped">
-          <thead className="table-dark">
-            <tr>
-              <th>Case ID</th>
-              <th>Title</th>
-              <th>Station</th>
-              <th>Status</th>
-              <th>Edit Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCases.map((c) => (
-              <tr key={c.id}>
-                <td>
-                  <a
-                    href={`/case/${c.id}`}
-                    className="text-primary text-decoration-underline"
-                  >
-                    {c.id}
-                  </a>
-                </td>
-                <td>{c.title}</td>
-                <td>{c.station}</td>
-                <td>
-                  <span className={`badge bg-${getStatusColor(c.status)}`}>
-                    {c.status}
-                  </span>
-                </td>
-                <td>
-                  <select
-                    className="form-select"
-                    value={c.status}
-                    onChange={(e) => handleStatusChange(c.id, e.target.value)}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Investigating">Investigating</option>
-                    <option value="Resolved">Resolved</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                </td>
+        {filteredCases.length > 0 ? (
+          <table className="case-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Title</th>
+                <th>Station</th>
+                <th>Status</th>
+                <th>Edit Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No cases assigned to you with the selected status.</p>
-      )}
+            </thead>
+            <tbody>
+              {filteredCases.map((c) => (
+                <tr key={c.id}>
+                  <td>
+                    <a href={`/case/${c.id}`} className="case-id-link">
+                      {c.id}
+                    </a>
+                  </td>
+                  <td>{c.title}</td>
+                  <td>{c.station}</td>
+                  <td>
+                    <span
+                      className={`case-status-badge bg-${getStatusColor(
+                        c.status
+                      )}`}
+                    >
+                      {c.status}
+                    </span>
+                  </td>
+                  <td>
+                    <select
+                      className="status-filter-select"
+                      value={c.status}
+                      onChange={(e) => handleStatusChange(c.id, e.target.value)}
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Investigating">Investigating</option>
+                      <option value="Resolved">Resolved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No cases assigned to you with the selected status.</p>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };

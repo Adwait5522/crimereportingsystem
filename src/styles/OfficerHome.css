@@ -1,0 +1,113 @@
+.officer-home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.officer-home-main {
+  padding: 1.5rem 0;
+  flex-grow: 1;
+}
+
+.officer-home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.officer-home-logout-btn {
+  border: 1px solid #003d80;
+  background-color: transparent;
+  color: #003d80;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.officer-home-logout-btn:hover {
+  background-color: #003d80;
+  color: white;
+}
+
+.status-filter-label {
+  margin-right: 0.5rem;
+}
+
+.status-filter-select {
+  display: inline-block;
+  width: auto;
+  margin-left: 0.5rem;
+}
+
+.case-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.case-table th,
+.case-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.case-table th {
+  background-color: #343a40;
+  color: white;
+}
+
+.case-id-link {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.case-status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.bg-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.bg-success {
+  background-color: #198754;
+  color: white;
+}
+
+.bg-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+.case-id-link,
+.case-id-link:visited {
+  color: #007bff; /* permanent blue */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.case-id-link:hover,
+.case-id-link:focus {
+  color: #0056b3; /* darker blue */
+  text-decoration: underline;
+  outline: none;
+}
+
+.case-id-link:active {
+  color: #003d80; /* darkest blue */
+}

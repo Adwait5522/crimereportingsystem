@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f6f8;
+  background: linear-gradient(135deg, #e3f2fd, #fce4ec);
 }
 
 .app-container {
@@ -11,12 +11,15 @@ body {
   justify-content: center;
   height: 100vh;
   text-align: center;
+  padding: 20px;
 }
 
 .title {
-  font-size: 2rem;
-  margin-bottom: 40px;
+  font-size: 2.5rem;
+  margin-bottom: 50px;
   color: #2c3e50;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px #ccc;
 }
 
 .button-group {
@@ -26,17 +29,21 @@ body {
 }
 
 .btn {
-  padding: 12px 24px;
-  font-size: 1rem;
+  padding: 14px 28px;
+  font-size: 1.1rem;
   border: none;
-  border-radius: 8px;
-  background-color: #3498db;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #3498db, #2980b9);
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 250px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  width: 270px;
+  font-weight: 500;
 }
 
 .btn:hover {
-  background-color: #2980b9;
+  background: linear-gradient(145deg, #2980b9, #1c6ea4);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
