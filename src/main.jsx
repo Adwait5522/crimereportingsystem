@@ -11,12 +11,14 @@ import CaseDetails from "./Pages/CaseDetails.jsx";
 import HeadquarterHome from "./Pages/HeadquaterHome.jsx";
 import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import "./index.css";
+import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/register" element={<Register />} />
       <Route path="/officer-login" element={<OfficerLogin />} />
+      <Route path="/add-officer" element={<AddOfficerForm />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
       <Route path="/headquarter-home" element={<HeadquarterHome />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

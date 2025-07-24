@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import "../styles/HeadquaterHome.css";
 import Header from "../Components/Header";
+import AddOfficerForm from "./AddOfficerForm";
 
 function HeadquarterHome() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function HeadquarterHome() {
               <button className="btn btn-primary w-100">Add Station</button>
             </div>
             <div className="col-6 col-sm-3">
-              <button className="btn btn-primary w-100">Add Officer</button>
+              <button className="btn btn-primary w-100" onClick={()=>{navigate("/add-officer")}}>Add Officer</button>
             </div>
             <div className="col-6 col-sm-3">
               <button className="btn btn-primary w-100">Complaints</button>
