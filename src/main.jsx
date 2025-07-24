@@ -11,9 +11,14 @@ import CaseDetails from "./Pages/CaseDetails.jsx";
 import HeadquarterHome from "./Pages/HeadquaterHome.jsx";
 import UserLogin from "./Pages/UserLogin.jsx";
 import AddPoliceStation from "./Pages/AddPoliceStation.jsx";
-import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
+
 import "./index.css";
+import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import ComplaintPage from "./Pages/ComplaintPage.jsx";
+import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
+
+
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
@@ -23,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/officer-login" element={<OfficerLogin />} />
       <Route path="/user-login" element={<UserLogin />} />
       <Route path="/add-station" element={<AddPoliceStation />} />
+ <Route path="/add-officer" element={<AddOfficerForm />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
       <Route path="/headquarter-home" element={<HeadquarterHome />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
