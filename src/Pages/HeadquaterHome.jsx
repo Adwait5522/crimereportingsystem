@@ -35,10 +35,24 @@ function HeadquarterHome() {
           {/* Buttons section similar to your original */}
           <div className="row justify-content-center g-3 mb-4">
             <div className="col-6 col-sm-3">
-              <button className="btn btn-primary w-100">Add Station</button>
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => {
+                  navigate("/add-station");
+                }}
+              >
+                Add Station
+              </button>
             </div>
             <div className="col-6 col-sm-3">
-              <button className="btn btn-primary w-100">Add Officer</button>
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => {
+                  navigate("/add-officer");
+                }}
+              >
+                Add Officer
+              </button>
             </div>
             <div className="col-6 col-sm-3">
               <button className="btn btn-primary w-100">Complaints</button>
