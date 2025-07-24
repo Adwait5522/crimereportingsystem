@@ -26,7 +26,7 @@ function App() {
             Officer Login
           </button>
           <button
-            className="btn btn-warning"
+            className="btn btn-success"
             onClick={() => navigate("/headquarter-login")}
           >
             Headquarter Login
