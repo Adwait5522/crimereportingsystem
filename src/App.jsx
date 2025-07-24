@@ -15,7 +15,7 @@ function App() {
         <div className="button-group">
           <button
             className="btn btn-success"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/user-login")}
           >
             Register a Complaint
           </button>
@@ -26,7 +26,7 @@ function App() {
             Officer Login
           </button>
           <button
-            className="btn btn-warning"
+            className="btn btn-success"
             onClick={() => navigate("/headquarter-login")}
           >
             Headquarter Login
