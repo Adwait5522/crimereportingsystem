@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import "../styles/AddOfficerForm.css"
-
-
-
+import React, { useState } from "react";
+import axios from "axios";
+// import "../styles/AddOfficerForm.css"
 
 const AddOfficerForm = () => {
   const [form, setForm] = useState({
-    officerName: '',
-    designationId: '',
-    policeStationId: '',
-    activeStatus: 'ACTIVE',
+    officerName: "",
+    designationId: "",
+    policeStationId: "",
+    activeStatus: "ACTIVE",
   });
 
   const handleChange = (e) => {
@@ -20,11 +17,11 @@ const AddOfficerForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/officers/add', form);
-      alert('Officer added successfully!');
+      await axios.post("http://localhost:8080/api/officers/add", form);
+      alert("Officer added successfully!");
     } catch (error) {
       console.error(error);
-      alert('Error adding officer.');
+      alert("Error adding officer.");
     }
   };
 
@@ -81,7 +78,9 @@ const AddOfficerForm = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary">Add Officer</button>
+        <button type="submit" className="btn btn-primary">
+          Add Officer
+        </button>
       </form>
     </div>
   );
