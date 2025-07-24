@@ -6,6 +6,8 @@ import Register from "./Pages/Register.jsx";
 import OfficerLogin from "./Pages/OfficerLogin.jsx";
 import HeadquarterLogin from "./Pages/HeadquarterLogin.jsx";
 import ForgotPassword from "./Pages/ForgotPassword.jsx";
+import OfficerHome from "./Pages/OfficerHome.jsx";
+import CaseDetails from "./Pages/CaseDetails.jsx";
 import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -15,6 +17,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/officer-login" element={<OfficerLogin />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/officer-home" element={<OfficerHome />} />
+      <Route path="/case/:caseId" element={<CaseDetails />} />
     </Routes>
   </BrowserRouter>
 );
