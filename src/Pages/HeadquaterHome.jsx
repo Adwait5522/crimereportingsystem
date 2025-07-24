@@ -19,7 +19,7 @@ function HeadquarterHome() {
 
   const handleLogout = () => {
     localStorage.removeItem("adminName");
-    navigate("/headquarter-home");
+    navigate("/headquarter-login");
   };
 
   return (

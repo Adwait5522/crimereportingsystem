@@ -1,285 +1,83 @@
-General Page Setup body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f1f3f6;
-  margin: 0;
-  padding: 0;
-  color: #2c3e50;
-}
-
-/* Container for Headquarter Login Page */
-.hq-login-container {
+/* Container */
+.officer-home-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 2rem;
-  background-color: #f1f3f6;
-  align-items: center;
-  justify-content: center;
 }
 
-/* Login Card Styling */
-.hq-login-card {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid #dee2e6;
-  width: 100%;
-  max-width: 400px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.hq-login-card h3 {
-  margin-bottom: 1.5rem;
-  color: #dc3545; /* Red theme */
-  font-weight: 600;
-  border-bottom: 2px solid #dc3545;
-  padding-bottom: 8px;
-}
-
-/* Form Styling */
-.form-group {
-  margin-bottom: 1rem;
-  text-align: left;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.625rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-control:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-  outline: none;
-}
-
-.invalid-feedback {
-  color: #d32f2f;
-  font-size: 0.875rem;
-}
-
-/* Remember Me + Forgot Password */
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.form-check-input {
-  margin-right: 0.4rem;
-}
-
-.form-check-label {
-  color: #2c3e50;
-}
-
-a.text-primary {
-  color: #dc3545;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-a.text-primary:hover {
-  color: #a71d2a;
-  text-decoration: underline;
-}
-
-/* Submit Button - styled like officer logout btn */
-.login-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: transparent;
-  color: #dc3545;
-  font-weight: 600;
-  border: 1px solid #dc3545;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.login-btn:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-/* Small Info Text */
-.text-muted {
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: #6c757d !important;
-  text-align: center;
-}
-
-/* Responsive for small devices */
-@media (max-width: 576px) {
-  .hq-login-card {
-    padding: 1rem;
-  }
-}
-
-/* Headquarter Home - Officer Container */
-.officer-home-container {
-  background-color: #f1f3f6;
-  min-height: 100vh;
-  padding: 2rem 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-/* Inner container */
 .officer-home-main {
-  background: white;
-  border-radius: 8px;
-  padding: 2rem;
-  max-width: 960px;
-  width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 0;
+  flex-grow: 1;
 }
 
-/* Header with welcome and logout */
 .officer-home-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.officer-home-header h3 {
-  color: #dc3545;
-  margin: 0;
-  font-weight: 600;
-  font-size: 1.5rem;
-}
-
-.officer-home-logout-btn {
-  padding: 8px 16px;
-  background-color: transparent;
-  border: 1px solid #dc3545;
-  color: #dc3545;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.officer-home-logout-btn:hover {
-  background-color: #dc3545;
+/* Reusable Button */
+.blue-btn {
+  background-color: #003d80;
   color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-/* Buttons section */
-.row.justify-content-center.g-3.mb-4 > div {
-  margin-bottom: 0.75rem;
+.blue-btn:hover {
+  background-color: #002f66;
 }
 
-.btn.btn-primary.w-100 {
-  background-color: #dc3545;
-  border-color: #dc3545;
-  font-weight: 600;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.btn.btn-primary.w-100:hover {
-  background-color: #a71d2a;
-  border-color: #a71d2a;
-}
-
-/* Table styling */
+/* Table Styles */
 .case-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
 }
 
 .case-table th,
 .case-table td {
-  padding: 12px 15px;
   border: 1px solid #dee2e6;
-  text-align: center;
-  vertical-align: middle;
+  padding: 0.75rem;
+  text-align: left;
 }
 
-.case-table thead.table-dark {
+.case-table th {
+  background-color: #343a40;
+  color: white;
+}
+
+.case-status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.bg-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.bg-success {
+  background-color: #198754;
+  color: white;
+}
+
+.bg-danger {
   background-color: #dc3545;
   color: white;
-  font-weight: 600;
 }
 
-.case-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* Responsive table container */
-.table-responsive {
-  overflow-x: auto;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .officer-home-main {
-    padding: 1rem;
-  }
-  .officer-home-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .officer-home-logout-btn {
-    width: 100%;
-  }
-  .row.justify-content-center.g-3.mb-4 > div {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-/* Blue Button Style for Logout and Action Buttons */
-.blue-btn {
-  background: linear-gradient(135deg, #2196f3, #0b79d0);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(33, 150, 243, 0.5);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-  width: 100%;
-  max-width: 200px; /* optional, for uniform width */
-}
-
-.blue-btn:hover {
-  box-shadow: 0 8px 16px rgba(33, 150, 243, 0.7);
-  transform: translateY(-2px);
-}
-
-/* Container for the three buttons above table */
-.action-buttons-container {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 1.5rem;
-  justify-content: flex-start; /* Align left, or change to center/space-between as needed */
-  flex-wrap: wrap;
-}
-
-.action-buttons-container > button {
-  flex: 1 1 150px; /* Responsive width, min 150px */
-  max-width: 200px;
+.bg-light {
+  background-color: #f8f9fa;
+  color: #212529;
 }
