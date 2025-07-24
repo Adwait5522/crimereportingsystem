@@ -1,0 +1,180 @@
+/* Make html and body take full height */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #eef2f5;
+}
+
+/* Make the entire page a vertical flex container */
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content takes available space and centers content */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  align-items: center;     /* horizontal center */
+  padding: 40px 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Style the heading and dropdown */
+.page-container h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #0a3d62;
+}
+
+.page-container p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.page-container select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Table styling */
+.page-container table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.page-container th,
+.page-container td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.page-container th {
+  background-color: #d3d3d3;
+}
+
+/* Action buttons */
+.page-container td:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.page-container button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.page-container button:nth-child(1) {
+  background-color: #f1c40f;
+  color: black;
+}
+
+.page-container button:nth-child(2) {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Feedback button style */
+.feedback-btn {
+  border: 1px solid #003d80 !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.feedback-btn:hover {
+  background-color: #003d80 !important;
+  color: white !important;
+}
+
+
+
+/* Default action button */
+.action-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Disabled state */
+.action-btn:disabled {
+  background-color: #a9a9a9; /* grey */
+  color: #f1f1f1;
+  cursor: not-allowed;
+}
+
+/* For table alignment */
+.complaints-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.complaints-table th,
+.complaints-table td {
+  padding: 10px 15px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+.action-btn {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #003d80;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.action-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.feedback-btn {
+  padding: 5px 10px;
+  background: linear-gradient(to right, #0056b3, #0099ff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Placeholder to keep feedback column aligned */
+.empty-feedback-slot {
+  height: 32px; /* Same height as feedback button */
+}
+
+/* Dropdown styling */
+.filter-dropdown {
+  margin-top: 1rem;
+  padding: 8px;
+  font-size: 1rem;
+}
+

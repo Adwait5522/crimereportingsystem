@@ -9,14 +9,20 @@ import ForgotPassword from "./Pages/ForgotPassword.jsx";
 import OfficerHome from "./Pages/OfficerHome.jsx";
 import CaseDetails from "./Pages/CaseDetails.jsx";
 import HeadquarterHome from "./Pages/HeadquaterHome.jsx";
+import UserLogin from "./Pages/UserLogin.jsx";
+import AddPoliceStation from "./Pages/AddPoliceStation.jsx";
 import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import "./index.css";
+import ComplaintPage from "./Pages/ComplaintPage.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/complaint" element={<ComplaintPage />} />
       <Route path="/officer-login" element={<OfficerLogin />} />
+      <Route path="/user-login" element={<UserLogin />} />
+      <Route path="/add-station" element={<AddPoliceStation />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
       <Route path="/headquarter-home" element={<HeadquarterHome />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
