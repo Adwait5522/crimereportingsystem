@@ -16,10 +16,6 @@ import "./index.css";
 
 import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import ComplaintPage from "./Pages/ComplaintPage.jsx";
-import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
-
-
-
 
 import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
 
@@ -32,7 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/officer-login" element={<OfficerLogin />} />
       <Route path="/user-login" element={<UserLogin />} />
       <Route path="/add-station" element={<AddPoliceStation />} />
- <Route path="/add-officer" element={<AddOfficerForm />} />
+      <Route path="/add-officer" element={<AddOfficerForm />} />
       <Route path="/add-officer" element={<AddOfficerForm />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
       <Route path="/headquarter-home" element={<HeadquarterHome />} />

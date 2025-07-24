@@ -1,6 +1,6 @@
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-import "./Page.css";
+import "../styles/Page.css";
 
 function Register() {
   return (
