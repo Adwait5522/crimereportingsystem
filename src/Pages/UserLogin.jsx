@@ -45,7 +45,7 @@ const UserLogin = () => {
           </form>
           <div className="text-muted">
             Don't have an account?{" "}
-            <a href="#" className="text-primary">
+            <a href="/register-user-form" className="text-primary">
               Register here
             </a>
           </div>

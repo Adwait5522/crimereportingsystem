@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import Footer from '../Components/Footer';
+import Header from '../Components/Header';
+
+
 const InspectorHome = () => {
   const [complaints, setComplaints] = useState([]);
 
@@ -11,6 +15,8 @@ const InspectorHome = () => {
   }, []);
 
   return (
+    <>
+     <Header />
     <div>
       <h2>Inspector Dashboard</h2>
       <table border="1">
@@ -31,6 +37,8 @@ const InspectorHome = () => {
         </tbody>
       </table>
     </div>
+    <Footer />
+    </>
   );
 };
 

@@ -11,7 +11,8 @@ import CaseDetails from "./Pages/CaseDetails.jsx";
 import HeadquarterHome from "./Pages/HeadquaterHome.jsx";
 import UserLogin from "./Pages/UserLogin.jsx";
 import AddPoliceStation from "./Pages/AddPoliceStation.jsx";
-
+import InspectorHome from "./Pages/InspectorHome.jsx";
+import RegisterUserForm from "./Pages/RegisterUserForm.jsx";
 import "./index.css";
 
 import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
@@ -36,6 +37,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/add-officer" element={<AddOfficerForm />} />
       <Route path="/case/:caseId" element={<CaseDetails />} />
       <Route path="/file-complaint" element={<FileComplaintForm />} />
+      <Route path="/register-user-form" element={<RegisterUserForm />} />
+      <Route path="/inspector-home" element={<InspectorHome />} />
     </Routes>
   </BrowserRouter>
 );

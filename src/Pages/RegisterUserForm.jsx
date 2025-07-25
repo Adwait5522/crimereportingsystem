@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import Footer from '../Components/Footer';
+import Header from '../Components/Header';
+
 const RegisterUserForm = () => {
   const [form, setForm] = useState({
     fullName: '',
@@ -28,22 +31,91 @@ const RegisterUserForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+      <Header />
+    <div className="card">
       <h2>User Registration</h2>
-      <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-      <input type="text" name="phone" placeholder="Phone" onChange={handleChange} required />
-      <input type="text" name="address" placeholder="Address" onChange={handleChange} required />
-      <input type="text" name="aadharNumber" placeholder="Aadhar Number" onChange={handleChange} required />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-      <select name="gender" onChange={handleChange} required>
-        <option value="">Select Gender</option>
-        <option value="MALE">Male</option>
-        <option value="FEMALE">Female</option>
-        <option value="OTHER">Other</option>
-      </select>
-      <button type="submit">Register</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <label className="form-label">Full Name</label>
+        <input
+          type="text"
+          name="fullName"
+          className="form-control"
+          placeholder="Full Name"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          className="form-control"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Phone</label>
+        <input
+          type="text"
+          name="phone"
+          className="form-control"
+          placeholder="Phone"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Address</label>
+        <input
+          type="text"
+          name="address"
+          className="form-control"
+          placeholder="Address"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Aadhar Number</label>
+        <input
+          type="text"
+          name="aadharNumber"
+          className="form-control"
+          placeholder="Aadhar Number"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          className="form-control"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+        />
+
+        <label className="form-label">Gender</label>
+        <select
+          name="gender"
+          className="form-control"
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select Gender</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="OTHER">Other</option>
+        </select>
+
+        <button type="submit" className="btn-primary">
+          Register
+        </button>
+      </form>
+    </div>
+    <Footer />
+    </>
   );
 };
 
