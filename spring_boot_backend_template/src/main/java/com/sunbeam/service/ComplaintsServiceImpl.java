@@ -31,7 +31,7 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     private final UserDao userDao;
 
     @Override
-    public String updateStatus(Integer complaintId, String newStatus) {
+    public String updateStatus(Long complaintId, String newStatus) {
         Complaints complaint = complaintsDao.findById(complaintId)
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
 
@@ -43,7 +43,7 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     }
     
     @Override
-    public String updatePriority(Integer complaintId, String newPriority) {
+    public String updatePriority(Long complaintId, String newPriority) {
         Complaints complaint = complaintsDao.findById(complaintId)
             .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
 
@@ -114,7 +114,7 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     }
     
     @Override
-	public String deleteCompliant(Integer complaint_id) {
+	public String deleteCompliant(Long complaint_id) {
 		// TODO Auto-generated method stub
 		Complaints complaint = complaintsDao.findById(complaint_id).orElseThrow(()->new ResourceNotFoundException("Invalid Complaint ID !!!!"));
 		complaint.setStatus(Status.REJECTED);

@@ -52,7 +52,7 @@ public class ComplaintsController {
 
     
     @PutMapping("/{id}/priority")
-    public ResponseEntity<?> updatePriority(@PathVariable Integer id, @RequestBody PriorityUpdateDTO dto) {
+    public ResponseEntity<?> updatePriority(@PathVariable Long id, @RequestBody PriorityUpdateDTO dto) {
         try {
             String msg = complaintsService.updatePriority(id, dto.getPriority());
             return ResponseEntity.ok(new ApiResponse(msg));
@@ -76,7 +76,7 @@ public class ComplaintsController {
     }
     
     @DeleteMapping("/{complaint_id}")
-	public ResponseEntity<?> deleteComplaints(@PathVariable Integer complaint_id)
+	public ResponseEntity<?> deleteComplaints(@PathVariable Long complaint_id)
 	{
 		System.out.println("in delete "+complaint_id);
 		return ResponseEntity.ok(complaintsService.deleteCompliant(complaint_id));

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ComplaintRespDTO {
-    private Integer complaintId;
+    private Long complaintId;
     private String complaintType;
     private String description;
     private String city;

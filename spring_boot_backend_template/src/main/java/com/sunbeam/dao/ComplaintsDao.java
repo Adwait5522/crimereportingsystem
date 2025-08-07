@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.sunbeam.entities.Complaints;
 
 @Repository
-public interface ComplaintsDao extends JpaRepository<Complaints, Integer> {
+public interface ComplaintsDao extends JpaRepository<Complaints, Long> {
 	
 	 List<Complaints> findByPoliceStationIdPoliceStationId(Long policeStationId);
 }

@@ -6,9 +6,9 @@ import com.sunbeam.dto.ComplaintReqDTO;
 import com.sunbeam.dto.ComplaintRespDTO;
 
 public interface ComplaintsService {
-	 String updateStatus(Integer complaintId, String newStatus);
+	 String updateStatus(Long complaintId, String newStatus);
 	 
-	 String updatePriority(Integer complaintId, String newPriority);
+	 String updatePriority(Long complaintId, String newPriority);
 	 
 	 List<ComplaintRespDTO> getComplaintsByPoliceStationId(Long policeStationId);
 	 
@@ -16,5 +16,5 @@ public interface ComplaintsService {
 	 
 	 List<ComplaintRespDTO> getComplaints();
 	 
-	 String deleteCompliant(Integer complaint_id);
+	 String deleteCompliant(Long complaint_id);
 }

@@ -29,7 +29,7 @@ public class Complaints extends BaseEntity{
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name="complaint_id")
-		private Integer complaint_id;
+		private Long complaint_id;
 		
 		
 		@NotNull
