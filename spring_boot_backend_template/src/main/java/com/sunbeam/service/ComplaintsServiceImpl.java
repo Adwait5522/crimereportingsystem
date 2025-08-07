@@ -1,15 +1,23 @@
 package com.sunbeam.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.sunbeam.custom_exceptions.ResourceNotFoundException;
+import com.sunbeam.exception.ResourceNotFoundException;
+import com.sunbeam.custom_exceptions.ApiException;
 import com.sunbeam.dao.ComplaintsDao;
+import com.sunbeam.dao.OfficerDao;
 import com.sunbeam.dao.PoliceStationDao;
 import com.sunbeam.dao.UserDao;
+import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.ComplaintReqDTO;
 import com.sunbeam.dto.ComplaintRespDTO;
+import com.sunbeam.dto.ComplaintResponseDTO;
+import com.sunbeam.dto.CreateComplaintDTO;
+import com.sunbeam.dto.UpdateComplaintDTO;
 import com.sunbeam.entities.Complaints;
 import com.sunbeam.entities.PoliceStation;
 import com.sunbeam.entities.Priority;
@@ -29,6 +37,12 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     private final PoliceStationDao policeStationDao;
     
     private final UserDao userDao;
+    
+    private final OfficerDao officerDao;
+    
+    ModelMapper mapper = new ModelMapper();
+    
+    
 
     @Override
     public String updateStatus(Long complaintId, String newStatus) {
@@ -60,7 +74,7 @@ public class ComplaintsServiceImpl implements ComplaintsService {
 
         return complaints.stream()
                 .map(c -> new ComplaintRespDTO(
-                    c.getComplaint_id(),
+                    c.getComplaintId(),
                     c.getComplaintType(),
                     c.getDescription(),
                     c.getCity(),
@@ -102,7 +116,7 @@ public class ComplaintsServiceImpl implements ComplaintsService {
 
         return complaintList.stream()
                 .map(c -> new ComplaintRespDTO(
-                        c.getComplaint_id(),
+                        c.getComplaintId(),
                         c.getComplaintType(),
                         c.getDescription(),
                         c.getCity(),
@@ -121,6 +135,107 @@ public class ComplaintsServiceImpl implements ComplaintsService {
 		complaintsDao.save(complaint);
 		
 		return "soft deleted complaint details";
+	}
+    
+    @Override
+	public List<ComplaintResponseDTO> getComplaintsByUserId(Long userId) {
+	    List<Complaints> complaints = complaintsDao.findByUserUserId(userId);
+	    List<ComplaintResponseDTO> dtoList = new ArrayList<>();
+
+	     // Create instance here
+
+	    // Define custom mapping locally
+	    mapper.typeMap(Complaints.class, ComplaintResponseDTO.class).addMappings(m -> {
+	        m.map(src -> src.getUser().getUserId(), ComplaintResponseDTO::setUserId);
+	        m.map(src -> src.getUser().getFullName(), ComplaintResponseDTO::setUserFullName);
+//	        m.map(Complaints::getEvidenceFiles, ComplaintResponseDTO::setEvidenceFiles);
+
+	        m.map(Complaints::getComplaintId, ComplaintResponseDTO::setComplaintId);
+	        m.map(Complaints::getCreatedAt, ComplaintResponseDTO::setCreatedAt);
+	    });
+
+
+	    for (Complaints complaint : complaints) {
+	        ComplaintResponseDTO dto = mapper.map(complaint, ComplaintResponseDTO.class);
+	        dtoList.add(dto);
+	    }
+
+	    return dtoList;
+	}
+
+	
+	@Override
+	
+	public ApiResponse registerComplaint(Long userId, CreateComplaintDTO dto) {
+	    User user =userDao.findById(userId.longValue())
+
+	        .orElseThrow(() -> new ResourceNotFoundException("User", "ID", userId));
+
+	    PoliceStation nearestPS = policeStationDao.findByPoliceStationPincode(dto.getLocationPincode())
+	        .orElseThrow(() -> new ResourceNotFoundException("Police Station", "Pincode", dto.getLocationPincode()));
+
+	    Complaints complaint = new Complaints();
+	    complaint.setUser(user);
+	    complaint.setComplaintType(dto.getTitle());
+	    complaint.setDescription(dto.getDescription());
+	    complaint.setLocationPincode(dto.getLocationPincode());
+	    complaint.setCity(dto.getCity());
+	    complaint.setState(dto.getState());
+	    complaint.setPoliceStationId(nearestPS);
+
+	    // ✅ Default status (OPEN)
+	    complaint.setStatus(Status.PENDING);
+
+	    // ✅ Default priority is already set to MEDIUM in entity, no need to manually set
+
+	    complaintsDao.save(complaint);
+
+	    return new ApiResponse("Complaint registered successfully!");
+	}
+	
+//	@Override
+//	public ApiResponse deleteCompliant(Long complaint_id) {
+//		// TODO Auto-generated method stub
+//		Complaints complaint = complaintsDao.findById(complaint_id).orElseThrow(()->new ResourceNotFoundException("Invalid Complaint ID !!!!"));
+//		complaint.setStatus(Status.REJECTED);
+//		complaintsDao.save(complaint);
+//		
+//		return new ApiResponse("soft deleted complaint details");
+//	}
+	@Override
+	@Transactional
+	public ApiResponse updateDetails(Long complaintId, UpdateComplaintDTO dto) {
+
+	    // Uniqueness check
+	    if (dto.getComplaintType() != null &&
+	        complaintsDao.existsByComplaintTypeAndComplaintIdNot(dto.getComplaintType(), complaintId)) {
+	        throw new ApiException("Duplicate complaint type - update failed");
+	    }
+
+	    // Fetch persistent entity
+	    Complaints complaint = complaintsDao.findById(complaintId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Invalid Complaint ID"));
+
+	    // Map basic fields (null values skipped by mapper configuration)
+	    mapper.map(dto, complaint);
+
+	    // Handle FKs manually if provided
+	    if (dto.getOfficerId() != null) {
+	        complaint.setOfficer(officerDao.findById(dto.getOfficerId())
+	                .orElseThrow(() -> new ResourceNotFoundException("Officer not found")));
+	    }
+	    if (dto.getPoliceStationId() != null) {
+	        complaint.setPoliceStationId(policeStationDao.findById(dto.getPoliceStationId())
+	                .orElseThrow(() -> new ResourceNotFoundException("Police station not found")));
+	    }
+	    if (dto.getPriority() != null) {
+	        complaint.setPriority(Priority.valueOf(dto.getPriority().toUpperCase()));
+	    }
+	    if (dto.getStatus() != null) {
+	        complaint.setStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+	    }
+
+	    return new ApiResponse("Complaint details updated!");
 	}
 
 

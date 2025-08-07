@@ -1,5 +1,6 @@
 package com.sunbeam.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -25,17 +26,20 @@ import lombok.Setter;
 	@Getter
 	@Setter
 	@NoArgsConstructor
-public class Complaints extends BaseEntity{
+public class Complaints {
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name="complaint_id")
-		private Long complaint_id;
+		private Long complaintId;
 		
 		
 		@NotNull
 		@ManyToOne(fetch=FetchType.LAZY)
 		@JoinColumn(name="user_id",nullable=false)
 		private User user;
+		
+		 @Column(name = "created_at", updatable = false)
+		    private LocalDateTime createdAt;
 		
 		@NotBlank
 		@Column(name="complaint_type",nullable=false,length=100)
@@ -51,7 +55,7 @@ public class Complaints extends BaseEntity{
 		
 		@NotBlank
 		@Column(name="location_pincode",nullable=false,length=10)
-		private String locationPincode;
+		private int locationPincode;
 		
 		@NotBlank
 	    @Column(name = "city", nullable = false, length = 30)
@@ -82,7 +86,7 @@ public class Complaints extends BaseEntity{
 	    private PoliceStation policeStationId;
 
 		public Complaints(@NotNull User user, @NotBlank String complaintType, @NotBlank String description,
-				List<String> evidenceFiles, @NotBlank String locationPincode, @NotBlank String city, @NotBlank String state,
+				List<String> evidenceFiles, @NotBlank int locationPincode, @NotBlank String city, @NotBlank String state,
 				Status status, Officer officer, Priority priority, PoliceStation policeStationId) {
 			super();
 			this.user = user;

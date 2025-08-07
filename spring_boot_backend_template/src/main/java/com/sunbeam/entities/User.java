@@ -1,5 +1,7 @@
 package com.sunbeam.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User extends BaseEntity{
+public class User{
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long userId;
@@ -80,6 +82,8 @@ public class User extends BaseEntity{
 		this.gender = gender;
 	}
 	
+	 @Column(name = "created_at", updatable = false)
+	    private LocalDateTime createdAt;
 	
 	
 }
