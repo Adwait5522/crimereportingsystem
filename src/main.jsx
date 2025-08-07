@@ -19,6 +19,8 @@ import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import ComplaintPage from "./Pages/ComplaintPage.jsx";
 
 import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
+import FeedBackComplaints from "./Pages/FeedBackComplaints.jsx";
+import AddDesignationForm from "./Pages/AddDesignationForm.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -35,6 +37,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/head-password" element={<ForgotPassword />} />
       <Route path="/officer-home" element={<OfficerHome />} />
       <Route path="/add-officer" element={<AddOfficerForm />} />
+      <Route path="/feedback-complaints" element={<FeedBackComplaints />} />
+      <Route path="/add-designation" element={<AddDesignationForm/>}/>
       <Route path="/case/:caseId" element={<CaseDetails />} />
       <Route path="/file-complaint" element={<FileComplaintForm />} />
       <Route path="/register-user-form" element={<RegisterUserForm />} />

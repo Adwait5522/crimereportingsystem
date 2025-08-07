@@ -3,18 +3,26 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import "../styles/HeadquaterHome.css";
 import Header from "../Components/Header";
+import axios from "axios"; // ⬅️ import axios
 
 function HeadquarterHome() {
   const navigate = useNavigate();
-
-  // Get adminName from localStorage
+  const [stations, setStations] = useState([]);
   const adminName = localStorage.getItem("adminName");
 
+
+  // Fetch police station stats on mount
   useEffect(() => {
-    if (!adminName) {
-      navigate("/headquarter-home"); // Redirect if not logged in
-    }
-  }, [navigate, adminName]);
+    axios
+      .get("http://localhost:8080/policestation/complaint-stats")
+      .then((response) => {
+        console.log(response.data);
+        setStations(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching station data:", error);
+      });
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("adminName");
@@ -32,14 +40,11 @@ function HeadquarterHome() {
             </button>
           </div>
 
-          {/* Buttons section similar to your original */}
           <div className="row justify-content-center g-3 mb-4">
             <div className="col-6 col-sm-3">
               <button
                 className="btn btn-primary w-100"
-                onClick={() => {
-                  navigate("/add-station");
-                }}
+                onClick={() => navigate("/add-station")}
               >
                 Add Station
               </button>
@@ -47,15 +52,21 @@ function HeadquarterHome() {
             <div className="col-6 col-sm-3">
               <button
                 className="btn btn-primary w-100"
-                onClick={() => {
-                  navigate("/add-officer");
-                }}
+                onClick={() => navigate("/add-officer")}
               >
                 Add Officer
               </button>
             </div>
             <div className="col-6 col-sm-3">
-              <button className="btn btn-primary w-100">Complaints</button>
+              <button className="btn btn-primary w-100" onClick={() => navigate("/feedback-complaints")}>Complaints</button>
+            </div>
+            <div className="col-6 col-sm-3">
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => navigate("/add-designation")}
+              >
+                Add Designation
+              </button>
             </div>
           </div>
 
@@ -74,30 +85,24 @@ function HeadquarterHome() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>101</td>
-                  <td>Central Station</td>
-                  <td>411001</td>
-                  <td>Raj Sharma</td>
-                  <td>150</td>
-                  <td>25</td>
-                </tr>
-                <tr>
-                  <td>102</td>
-                  <td>North Station</td>
-                  <td>411002</td>
-                  <td>Priya Iyer</td>
-                  <td>120</td>
-                  <td>40</td>
-                </tr>
-                <tr>
-                  <td>103</td>
-                  <td>East Station</td>
-                  <td>411003</td>
-                  <td>Ajay Singh</td>
-                  <td>95</td>
-                  <td>10</td>
-                </tr>
+                {stations.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      Loading...
+                    </td>
+                  </tr>
+                ) : (
+                  stations.map((station) => (
+                    <tr key={station.policeStationId}>
+                      <td>{station.policeStationId}</td>
+                      <td>{station.policeStationName}</td>
+                      <td>{station.policeStationPincode}</td>
+                      <td>{station.inchargeName}</td>
+                      <td>{station.resolvedCount}</td>
+                      <td>{station.unresolvedCount}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
