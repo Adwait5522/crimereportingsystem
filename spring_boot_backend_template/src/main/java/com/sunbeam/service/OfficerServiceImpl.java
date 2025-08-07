@@ -115,6 +115,31 @@ public class OfficerServiceImpl implements OfficerService {
 	    return "Designation Updated Successfully";
 	}
     
+    @Override
+    public List<OfficerRespDTO> getAllOfficers() {
+        List<Officer> allOfficers = officerDao.findAll();
+
+        return allOfficers.stream()
+                .map(officer -> {
+                    OfficerRespDTO dto = new OfficerRespDTO();
+                    dto.setOfficerId(officer.getOfficerId());
+                    dto.setOfficerName(officer.getOfficerName());
+                    dto.setDesignation(officer.getDesignation().getDesignationName());
+
+                    // Null-safe police station name
+                    if (officer.getPoliceStation() != null) {
+                        dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
+                    } else {
+                        dto.setPoliceStationName("Not Assigned");
+                    }
+
+                    dto.setStatus(officer.getActiveStatus().toString());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    
     
     
 //    @Override
@@ -135,7 +160,7 @@ public class OfficerServiceImpl implements OfficerService {
     
     @Override
     public List<OfficerRespDTO> getAllInspectors() {
-        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_head");
+        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_incharge");
 
         return allOfficers.stream()
                 .map(officer -> {

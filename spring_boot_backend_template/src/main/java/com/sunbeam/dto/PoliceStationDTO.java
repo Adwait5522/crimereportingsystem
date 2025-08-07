@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PoliceStationDTO {
+	private Long policeStationId;
     private String policeStationName;
     private Integer policeStationPincode;
     private Integer numberOfOfficers;

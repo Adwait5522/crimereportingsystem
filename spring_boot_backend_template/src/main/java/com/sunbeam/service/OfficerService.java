@@ -22,4 +22,7 @@ public interface OfficerService {
 	OfficerRespDTO getOfficerById(Long id);
 
 	List<OfficerRespDTO> getOfficersByInspector(Long inspectorId);
+	
+	List<OfficerRespDTO> getAllOfficers();
+
 }

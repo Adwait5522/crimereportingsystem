@@ -39,11 +39,11 @@ public class PoliceStationController {
 		return policeStationService.getAllActivePoliceStation();
 	}
 	
-//	@PostMapping
-//	public String addtPoliceStation(@RequestBody AddPoliceStationDTO addPoliceStationDTO) {
-//		policeStationService.addPoliceStation(addPoliceStationDTO);
-//		return "Added successfully";	
-//	}
+	@PostMapping
+	public String addtPoliceStation(@RequestBody AddPoliceStationDTO addPoliceStationDTO) {
+		policeStationService.addPoliceStation(addPoliceStationDTO);
+		return "Added successfully";	
+	}
 	
 	@PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody PoliceStationDTO dto) {

@@ -87,29 +87,29 @@ public class PoliceStationServiceImpl implements PoliceStationService{
 //		return "Added Successfully";
 //	}
 	
-//	@Override
-//	public String addPoliceStation(AddPoliceStationDTO addPoliceStationDTO) {
-//	    // Step 1: Map DTO to Entity
-//	    PoliceStation policeStation = modelMapper.map(addPoliceStationDTO, PoliceStation.class);
-//
-//	    // Step 2: Get Officer by ID
-//	    Officer officer = officerDao.findById(addPoliceStationDTO.getStationHeadId())
-//	            .orElseThrow(() -> new CustomExceptionClass("Cannot add station"));
-//
-//	    // Step 3: Set Officer as Station Head (Bidirectional link - Optional)
-//	    policeStation.setStationHead(officer);
-//
-//	    // Step 4: Save Police Station first to get its ID
-//	    PoliceStation savedStation = policeStationDao.save(policeStation);
-//
-//	    // Step 5: Set saved station to the officer's policeStation field
-//	    officer.setPoliceStation(savedStation);
-//
-//	    // Step 6: Save the updated officer
-//	    officerDao.save(officer);
-//
-//	    return "Added Successfully";
-//	}
+	@Override
+	public String addPoliceStation(AddPoliceStationDTO addPoliceStationDTO) {
+	    // Step 1: Map DTO to Entity
+	    PoliceStation policeStation = modelMapper.map(addPoliceStationDTO, PoliceStation.class);
+
+	    // Step 2: Get Officer by ID
+	    Officer officer = officerDao.findById(addPoliceStationDTO.getStationHeadId())
+	            .orElseThrow(() -> new CustomExceptionClass("Cannot add station"));
+
+	    // Step 3: Set Officer as Station Head (Bidirectional link - Optional)
+	    policeStation.setStationHead(officer);
+
+	    // Step 4: Save Police Station first to get its ID
+	    PoliceStation savedStation = policeStationDao.save(policeStation);
+
+	    // Step 5: Set saved station to the officer's policeStation field
+	    officer.setPoliceStation(savedStation);
+
+	    // Step 6: Save the updated officer
+	    officerDao.save(officer);
+
+	    return "Added Successfully";
+	}
 
 
 	@Override

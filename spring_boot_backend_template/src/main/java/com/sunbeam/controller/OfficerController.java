@@ -34,6 +34,12 @@ import lombok.AllArgsConstructor;
 public class OfficerController {
 	private final OfficerService officerService;
 	private final ComplaintsService complaintsService; 
+	
+	@GetMapping("/officers")
+	public ResponseEntity<List<OfficerRespDTO>> getAllOfficers() {
+	    return ResponseEntity.ok(officerService.getAllOfficers());
+	}
+
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> officerSignIn(@RequestBody OfficerLoginReqDTO logindto ){

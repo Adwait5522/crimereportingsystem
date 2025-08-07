@@ -18,6 +18,8 @@ public interface PoliceStationService {
 	    
 	    boolean existsByStationHeadOfficerId(Long officerId);
 	    
+	    String addPoliceStation(AddPoliceStationDTO addPoliceStationDTO);
+	    
 //	    NearestPoliceStationResponseDTO findNearestStation(NearestPoliceStationRequestDTO request);
 	    
 	    NearestPoliceStationResponseDTO findNearestPoliceStation(double latitude, double longitude);

@@ -25,7 +25,7 @@ public interface PoliceStationRepository extends CrudRepository<PoliceStation, L
         LEFT JOIN 
             officer o ON ps.station_head_id = o.officer_id
         LEFT JOIN 
-            complaint c ON ps.police_station_id = c.police_station_id
+            complaints c ON ps.police_station_id = c.police_station_id
         GROUP BY 
             ps.police_station_id, ps.police_station_name, o.officer_name
         """, nativeQuery = true)
