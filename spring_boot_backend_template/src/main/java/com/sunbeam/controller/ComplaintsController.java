@@ -103,4 +103,16 @@ public class ComplaintsController {
 
 	    return ResponseEntity.ok(complaints);
 	}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getComplaintsById(@PathVariable Long id) {
+        ComplaintRespDTO complaint = complaintsService.getComplaintsById(id);
+        return ResponseEntity.ok(complaint);
+    }
+    @PutMapping("/{complaintId}/assign/{officerId}")
+    public ResponseEntity<String> assignOfficerToComplaint(
+            @PathVariable Long complaintId,
+            @PathVariable Long officerId) {
+        	complaintsService.assignOfficer(complaintId, officerId);
+        return ResponseEntity.ok("Officer assigned successfully.");
+    }
 }
