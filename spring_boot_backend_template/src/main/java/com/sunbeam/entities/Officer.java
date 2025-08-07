@@ -37,7 +37,7 @@ public class Officer extends BaseEntity {
     private Designation designation;
 
     @ManyToOne
-    @JoinColumn(name = "police_station_id", referencedColumnName = "police_station_id")
+    @JoinColumn(name = "police_station_id", referencedColumnName = "police_station_id",nullable = true)
     private PoliceStation policeStation;
 
 }

@@ -53,7 +53,7 @@ public class Complaints {
 		@Column(name = "evidence_files", columnDefinition = "TEXT")
 		private List<String> evidenceFiles;
 		
-		@NotBlank
+		@NotNull
 		@Column(name="location_pincode",nullable=false,length=10)
 		private int locationPincode;
 		

@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
 	    UserResponseDTO responseDto = mapper.map(savedUser, UserResponseDTO.class);
 
 	    // ✅ Manually set createdOn from created_at in BaseEntity
-	    responseDto.setCreatedOn(savedUser.getCreatedAt());
+	    responseDto.setCreatedOn(savedUser.getCreatedOn());
 
 	    return responseDto;
 	}

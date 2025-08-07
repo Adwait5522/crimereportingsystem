@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -50,7 +51,7 @@ public class User{
 	
 	@Pattern(regexp = "^\\d{12}$", message="Aadhar Number must be exactly 12 digits")
 	@Column(name="aadhar_number",length=12)
-	private String aadhar_number;
+	private String aadharNumber;
 	
 	@NotBlank(message = "Password is required")
 	@Size(min=6,message="Password should be atleast 6 charachters")
@@ -58,7 +59,7 @@ public class User{
 	private String password;
 	
 	
-	@NotBlank(message="Gender is required")
+	@NotNull(message="Gender is required")
 	@Enumerated(EnumType.STRING)
 	@Column(name="gender",length=10,nullable=false)
 	private Gender gender;
@@ -77,13 +78,13 @@ public class User{
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
-		this.aadhar_number = aadhar_number;
+		this.aadharNumber = aadhar_number;
 		this.password = password;
 		this.gender = gender;
 	}
 	
-	 @Column(name = "created_at", updatable = false)
-	    private LocalDateTime createdAt;
+	 @Column(name = "created_on", updatable = false)
+	    private LocalDateTime createdOn;
 	
 	
 }

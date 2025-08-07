@@ -42,8 +42,10 @@ public class UserRequestDTO extends BaseDTO{
 	    @Size(min = 8)
 	    private String password;
 
-	    @NotNull
+	    @NotNull(message = "Gender is required")
 	    private Gender gender;
+
+
 	    
 	    @JsonProperty("created_on")
 	    private LocalDate createdOn;

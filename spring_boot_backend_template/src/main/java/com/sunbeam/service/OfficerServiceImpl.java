@@ -73,29 +73,29 @@ public class OfficerServiceImpl implements OfficerService {
     }
     
     @Override
-	public String addOfficer(OfficerDTO officerDTO) {
-	    Officer officer = new Officer();
-	    officer.setOfficerName(officerDTO.getOfficerName());
-	    officer.setActiveStatus(OfficerStatus.ACTIVE);
-	    
-//	    Long policeStationId = officerDTO.getPoliceStationId();
-	    
+    public String addOfficer(OfficerDTO officerDTO) {
+        Officer officer = new Officer();
+        officer.setOfficerName(officerDTO.getOfficerName());
+        officer.setActiveStatus(OfficerStatus.ACTIVE);
 
-	    PoliceStation ps = policeStationDao.findById(officerDTO.getPoliceStationId())
-	    	    .orElseThrow(() -> new CustomExceptionClass("Police Station not found"));
+        // Set Designation (required)
+        Designation desig = designationDao.findById(officerDTO.getDesignationId())
+            .orElseThrow(() -> new CustomExceptionClass("Designation not found"));
+        officer.setDesignation(desig);
 
+        // Set Police Station only if ID is provided
+        if (officerDTO.getPoliceStationId() != null) {
+            PoliceStation ps = policeStationDao.findById(officerDTO.getPoliceStationId())
+                .orElseThrow(() -> new CustomExceptionClass("Police Station not found"));
+            officer.setPoliceStation(ps);
+        } else {
+            officer.setPoliceStation(null); // optional but clear
+        }
 
-	    	Designation desig = designationDao.findById(officerDTO.getDesignationId())
-	    	    .orElseThrow(() -> new CustomExceptionClass("Designation not found"));
+        officerDao.save(officer);
+        return "Officer Added";
+    }
 
-
-	    officer.setPoliceStation(ps);
-	    officer.setDesignation(desig);
-
-	    officerDao.save(officer);
-
-	    return "Officer Added";
-	}
 
     @Override
 	public String updateDesignation(Long officerId) {
@@ -115,9 +115,25 @@ public class OfficerServiceImpl implements OfficerService {
     
     
     
+//    @Override
+//    public List<OfficerRespDTO> getAllInspectors() {
+//        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_head");
+//
+//        return allOfficers.stream()
+//                .map(officer -> {
+//                    OfficerRespDTO dto = new OfficerRespDTO();
+//                    dto.setOfficerId(officer.getOfficerId());
+//                    dto.setOfficerName(officer.getOfficerName());
+//                    dto.setDesignation(officer.getDesignation().getDesignationName());
+//                    dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
+//                    dto.setStatus(officer.getActiveStatus().toString());
+//                    return dto;
+//                }).toList();
+//    }
+    
     @Override
     public List<OfficerRespDTO> getAllInspectors() {
-        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("Inspector");
+        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_head");
 
         return allOfficers.stream()
                 .map(officer -> {
@@ -125,10 +141,18 @@ public class OfficerServiceImpl implements OfficerService {
                     dto.setOfficerId(officer.getOfficerId());
                     dto.setOfficerName(officer.getOfficerName());
                     dto.setDesignation(officer.getDesignation().getDesignationName());
-                    dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
+
+                    // Null check for policeStation
+                    if (officer.getPoliceStation() != null) {
+                        dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
+                    } else {
+                        dto.setPoliceStationName("Not Assigned"); // or use null or empty string
+                    }
+
                     dto.setStatus(officer.getActiveStatus().toString());
                     return dto;
                 }).toList();
     }
+
 
 }
