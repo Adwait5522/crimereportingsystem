@@ -3,6 +3,7 @@ package com.sunbeam.controller;
 import java.util.List;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.AddPoliceStationDTO;
+import com.sunbeam.dto.NearestPoliceStationRequestDTO;
+import com.sunbeam.dto.NearestPoliceStationResponseDTO;
 import com.sunbeam.dto.PoliceStationDTO;
 import com.sunbeam.entities.PoliceStation;
 import com.sunbeam.service.PoliceStationService;
@@ -36,17 +39,30 @@ public class PoliceStationController {
 		return policeStationService.getAllActivePoliceStation();
 	}
 	
-	@PostMapping
-	public String addtPoliceStation(@RequestBody AddPoliceStationDTO addPoliceStationDTO) {
-		policeStationService.addPoliceStation(addPoliceStationDTO);
-		return "Added successfully";	
-	}
+//	@PostMapping
+//	public String addtPoliceStation(@RequestBody AddPoliceStationDTO addPoliceStationDTO) {
+//		policeStationService.addPoliceStation(addPoliceStationDTO);
+//		return "Added successfully";	
+//	}
+	
+	@PostMapping("/create")
+    public ResponseEntity<?> create(@RequestBody PoliceStationDTO dto) {
+        String msg = policeStationService.createPoliceStation(dto);
+        return ResponseEntity.ok(msg);
+    }
 	
 	@DeleteMapping("/{policeStaionId}")
 	public String deletePoliceStation(@PathVariable Long policeStaionId) {
 		return policeStationService.deletePoliceStation(policeStaionId);
 	}
 	
+	@PostMapping("/nearest")
+    public ResponseEntity<NearestPoliceStationResponseDTO> findNearestPoliceStation(
+            @RequestBody NearestPoliceStationRequestDTO requestDTO) {
+        NearestPoliceStationResponseDTO response = policeStationService.findNearestPoliceStation(
+                requestDTO.getLatitude(), requestDTO.getLongitude());
+        return ResponseEntity.ok(response);
+    }
 	
 	
 }

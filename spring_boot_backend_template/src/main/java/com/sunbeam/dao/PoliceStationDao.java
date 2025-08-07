@@ -11,4 +11,7 @@ public interface PoliceStationDao extends JpaRepository<PoliceStation, Long>{
 	List<PoliceStation> findAll(); 	
 	List<PoliceStation> findByStatus(boolean status);
 	Optional<PoliceStation> findByPoliceStationPincode(int policeStationPincode);
+	
+	boolean existsByStationHeadOfficerId(Long officerId);
+	
 }
