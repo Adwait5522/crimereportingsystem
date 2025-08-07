@@ -71,7 +71,7 @@ function HeadquarterHome() {
              <div className="col-6 col-sm-3">
             <button
               className="btn btn-primary w-100"
-              onClick={() => navigate("/see-officers")}
+              onClick={() => navigate("/display-officers")}
             >
               See Officers
             </button>

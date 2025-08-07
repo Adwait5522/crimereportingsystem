@@ -40,7 +40,7 @@ const AddOfficerForm = () => {
     };
     console.log("Data to send:", payload);  // <-- Log the payload here
     try {
-      await axios.post("http://localhost:8080/officer", payload);
+      await axios.post("http://localhost:8080/officers", payload);
       alert("Officer added successfully!");
       // Optionally reset form here
       setForm({ officerName: "", designationId: "", policeStationId: "" });
@@ -95,7 +95,7 @@ const AddOfficerForm = () => {
             </select>
           </div>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label className="form-label">Police Station</label>
             <select
               name="policeStationId"
@@ -114,7 +114,7 @@ const AddOfficerForm = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
           <button type="submit" className="btn btn-primary">
             Add Officer

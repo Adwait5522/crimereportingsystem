@@ -136,13 +136,13 @@ const UserLogin = () => {
               <label className="form-check-label">
                 <input type="checkbox" /> Remember me
               </label>
-              <a href="#" className="text-primary">Forgot Password?</a>
+              {/* <a href="#" className="text-primary">Forgot Password?</a> */}
             </div>
 
             <button type="submit" className="login-btn">Login</button>
           </form>
           <div className="text-muted">
-            Don't have an account? <a href="#" className="text-primary">Register here</a>
+            Don't have an account? <a href="/register-user-form" className="text-primary">Register here</a>
           </div>
         </div>
       </div>

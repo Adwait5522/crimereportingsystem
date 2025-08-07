@@ -621,17 +621,30 @@ const ComplaintPage = () => {
       <div className="complaint-page-container">
         <h2>View and manage your complaints.</h2>
 
-        <div className="filter-buttons">
-          {['ALL', 'OPEN', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'].map(status => (
-            <button
-              key={status}
-              onClick={() => setFilter(status)}
-              className={filter === status ? 'active-filter' : ''}
-            >
-              {status.replace('_', ' ')}
-            </button>
-          ))}
-        </div>
+        <div className="filter-dropdown">
+  <label htmlFor="statusFilter">Filter by Status: </label>
+  <select
+    id="statusFilter"
+    value={filter}
+    onChange={(e) => setFilter(e.target.value)}
+  >
+    {['ALL', 'OPEN', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'].map(status => (
+      <option key={status} value={status}>
+        {status.replace('_', ' ')}
+      </option>
+    ))}
+  </select>
+</div>
+
+    <div className="add-complaint-container">
+  <button
+    className="add-complaint-btn"
+    onClick={() => navigate('/file-complaint')}
+  >
+    Add Complaint
+  </button>
+</div>
+
 
         <table className="complaint-table">
           <thead>
@@ -675,7 +688,7 @@ const ComplaintPage = () => {
           </tbody>
         </table>
 
-        <div className="location-info">
+        {/* <div className="location-info">
           <h4>Your Current Location:</h4>
           {location.latitude && location.longitude ? (
             <p>
@@ -684,7 +697,7 @@ const ComplaintPage = () => {
           ) : (
             <p>{locationError || 'Fetching location...'}</p>
           )}
-        </div>
+        </div> */}
       </div>
 
       <Footer />

@@ -15,7 +15,7 @@ const AddPoliceStation = () => {
   });
 
   useEffect(() => {
-    axios.get("http://localhost:8080/officer/investigating-officer")
+    axios.get("http://localhost:8080/officers/inspectors")
       .then(res => setInvestigatingOfficers(res.data))
       .catch(err => console.error("Error fetching investigating officers:", err));
   }, []);
@@ -54,7 +54,7 @@ console.log("Sending station registration data:", stationPayload);
       await axios.post("http://localhost:8080/policestation", stationPayload);
 
       // Step 2: Update the officer's designation
-      await axios.patch(`http://localhost:8080/officer/update-designation-incharge?id=${selectedOfficerId}`);
+      await axios.patch(`http://localhost:8080/officers/update-designation-incharge?id=${selectedOfficerId}`);
 
       alert("Police Station registered and Officer promoted to Station Incharge!");
 

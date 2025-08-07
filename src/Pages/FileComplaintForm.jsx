@@ -98,7 +98,7 @@ const FileComplaintForm = () => {
             </div>
 
             {/* Evidence Files */}
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label className="form-label">Upload Evidence Files</label>
               <input
                 type="file"
@@ -107,7 +107,7 @@ const FileComplaintForm = () => {
                 className="form-control"
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
 
             {/* Location */}
             <div className="mb-3">
