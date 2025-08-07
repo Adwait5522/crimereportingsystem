@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,8 +20,10 @@ import lombok.NoArgsConstructor;
 public class Officer extends BaseEntity {
 
 
-    @Id
-    private Long officerId;
+	 @Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "officer_id", unique = true)
+	 private Long officerId;
 
     @Column(nullable = false, length = 255)
     private String officerName;
@@ -33,6 +37,7 @@ public class Officer extends BaseEntity {
     private Designation designation;
 
     @ManyToOne
-    @JoinColumn(name = "police_station_id", referencedColumnName = "policeStationId")
+    @JoinColumn(name = "police_station_id", referencedColumnName = "police_station_id")
     private PoliceStation policeStation;
+
 }

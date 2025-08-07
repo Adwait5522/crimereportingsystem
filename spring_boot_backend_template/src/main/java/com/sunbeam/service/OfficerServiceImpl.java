@@ -7,13 +7,20 @@ import org.springframework.stereotype.Service;
 
 import com.sunbeam.custom_exceptions.ApiException;
 import com.sunbeam.custom_exceptions.ResourceNotFoundException;
+import com.sunbeam.dao.DesignationDao;
 import com.sunbeam.dao.OfficerDao;
 import com.sunbeam.dao.OfficerLoginDao;
+import com.sunbeam.dao.PoliceStationDao;
+import com.sunbeam.dto.OfficerDTO;
 import com.sunbeam.dto.OfficerLoginReqDTO;
 import com.sunbeam.dto.OfficerLoginRespDTO;
 import com.sunbeam.dto.OfficerRespDTO;
+import com.sunbeam.entities.Designation;
 import com.sunbeam.entities.Officer;
 import com.sunbeam.entities.OfficerLogin;
+import com.sunbeam.entities.OfficerStatus;
+import com.sunbeam.entities.PoliceStation;
+import com.sunbeam.exception.CustomExceptionClass;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -28,6 +35,10 @@ public class OfficerServiceImpl implements OfficerService {
     private final OfficerLoginDao officerLoginDao; // ✅ updated name
     
     private final OfficerDao officerDao;
+    
+    private final PoliceStationDao policeStationDao;
+    
+    private final DesignationDao designationDao;
     
     private final ModelMapper modelMapper;
     
@@ -60,7 +71,47 @@ public class OfficerServiceImpl implements OfficerService {
 
         return new OfficerLoginRespDTO("Login Successful!", designationId);
     }
+    
+    @Override
+	public String addOfficer(OfficerDTO officerDTO) {
+	    Officer officer = new Officer();
+	    officer.setOfficerName(officerDTO.getOfficerName());
+	    officer.setActiveStatus(OfficerStatus.ACTIVE);
+	    
+//	    Long policeStationId = officerDTO.getPoliceStationId();
+	    
 
+	    PoliceStation ps = policeStationDao.findById(officerDTO.getPoliceStationId())
+	    	    .orElseThrow(() -> new CustomExceptionClass("Police Station not found"));
+
+
+	    	Designation desig = designationDao.findById(officerDTO.getDesignationId())
+	    	    .orElseThrow(() -> new CustomExceptionClass("Designation not found"));
+
+
+	    officer.setPoliceStation(ps);
+	    officer.setDesignation(desig);
+
+	    officerDao.save(officer);
+
+	    return "Officer Added";
+	}
+
+    @Override
+	public String updateDesignation(Long officerId) {
+	  
+	    Officer officer = officerDao.findById(officerId)
+	        .orElseThrow(() -> new CustomExceptionClass("Officer not found with id: " + officerId));
+
+	    Designation designation = designationDao.findByDesignationName("station_incharge")
+	        .orElseThrow(() -> new CustomExceptionClass("Designation 'station_incharge' not found"));
+
+	    officer.setDesignation(designation);
+
+	    officerDao.save(officer);
+
+	    return "Designation Updated Successfully";
+	}
     
     
     
