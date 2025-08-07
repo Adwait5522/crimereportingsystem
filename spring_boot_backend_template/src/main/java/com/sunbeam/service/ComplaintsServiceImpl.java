@@ -2,6 +2,7 @@ package com.sunbeam.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import com.sunbeam.dao.UserDao;
 import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.ComplaintReqDTO;
 import com.sunbeam.dto.ComplaintRespDTO;
+import com.sunbeam.dto.ComplaintRespDTO2;
 import com.sunbeam.dto.ComplaintResponseDTO;
 import com.sunbeam.dto.CreateComplaintDTO;
 import com.sunbeam.dto.UpdateComplaintDTO;
 import com.sunbeam.entities.Complaints;
+import com.sunbeam.entities.Officer;
 import com.sunbeam.entities.PoliceStation;
 import com.sunbeam.entities.Priority;
 import com.sunbeam.entities.Status;
@@ -236,6 +239,66 @@ public class ComplaintsServiceImpl implements ComplaintsService {
 	    }
 
 	    return new ApiResponse("Complaint details updated!");
+	}
+
+	@Override
+	public List<ComplaintRespDTO2> getComplaintsByStationFromOfficer(Long inspectorId) {
+		Officer officer = officerDao.findById(inspectorId).orElseThrow(()-> new ResourceNotFoundException("Inspector not found"));
+
+        PoliceStation station = officer.getPoliceStation();
+        if (station == null) {
+            throw new RuntimeException("No police station assigned to this inspector");
+        }
+
+        List<Complaints> complaints = complaintsDao.findByPoliceStationId(station);
+        return complaints.stream()
+                .map(c -> new ComplaintRespDTO2(
+                        c.getComplaintId(),
+                        c.getComplaintType(),
+                        c.getDescription(),
+                        c.getCity(),
+                        c.getState(),
+                        c.getStatus().name(),
+                        c.getPriority().name(),
+                        c.getOfficer() != null ? c.getOfficer().getOfficerId() : null
+                ))
+                .collect(Collectors.toList());
+	}
+
+    @Override
+    public List<ComplaintRespDTO> getComplaintsByOfficerId(Long officerId) {
+        List<Complaints> complaints = complaintsDao.findByOfficerOfficerId(officerId);
+
+        return complaints.stream()
+                .map(c -> new ComplaintRespDTO(
+                    c.getComplaintId(),
+                    c.getComplaintType(),
+                    c.getDescription(),
+                    c.getCity(),
+                    c.getState(),
+                    c.getStatus().toString(),
+                    c.getPriority().toString()
+                ))
+                .toList();
+    }
+
+	@Override
+	public ComplaintRespDTO getComplaintsById(Long id) {
+		Complaints complaints= complaintsDao.findById(id).orElseThrow(()-> new ResourceNotFoundException("Complaint not found"));
+		return new ComplaintRespDTO(complaints.getComplaintId(),complaints.getComplaintType(),complaints.getDescription(),complaints.getCity(),complaints.getState(),complaints.getStatus().name(),complaints.getPriority().name());
+	}
+
+	@Override
+	public void assignOfficer(Long complaintId, Long officerId) {
+		 Complaints complaint = complaintsDao.findById(complaintId)
+	                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+
+	        Officer officer = officerDao.findById(officerId)
+	                .orElseThrow(() -> new RuntimeException("Officer not found"));
+
+	        complaint.setOfficer(officer);
+	        complaintsDao.save(complaint);
+		
 	}
 
 
