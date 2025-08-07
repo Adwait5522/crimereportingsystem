@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PoliceStationUpdateDTO {
 	private String policeStationName;
-	private String policeStationPincode;
-	private String googleMap;
+    private Integer policeStationPincode;
+    private Integer numberOfOfficers;
+    private String mapsLink;
+    private Double latitude;
+    private Double longitude;
+    private Long stationHeadId;
 }
