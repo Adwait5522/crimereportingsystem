@@ -121,8 +121,28 @@ public class PoliceStationServiceImpl implements PoliceStationService{
 
 	@Override
 	public String updatePoliceStation(Long id, PoliceStationUpdateDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		PoliceStation station = policeStationDao.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("Police Station not found with ID: " + id));
+
+		    if (!station.isStatus()) {
+		        throw new RuntimeException("Police Station is INACTIVE.");
+		    }
+
+		    if (dto.getPoliceStationName() != null) station.setPoliceStationName(dto.getPoliceStationName());
+		    if (dto.getPoliceStationPincode() != null) station.setPoliceStationPincode(dto.getPoliceStationPincode());
+		    if (dto.getNumberOfOfficers() != null) station.setNumberOfOfficers(dto.getNumberOfOfficers());
+		    if (dto.getMapsLink() != null) station.setMapsLink(dto.getMapsLink());
+		    if (dto.getLatitude() != null) station.setLatitude(dto.getLatitude());
+		    if (dto.getLongitude() != null) station.setLongitude(dto.getLongitude());
+
+		    if (dto.getStationHeadId() != null) {
+		        Officer head = officerDao.findById(dto.getStationHeadId())
+		            .orElseThrow(() -> new ResourceNotFoundException("Officer not found with ID: " + dto.getStationHeadId()));
+		        station.setStationHead(head);
+		    }
+
+		    policeStationDao.save(station);
+		    return "Updated the Police Station successfully!!";
 	}
 	
 	
