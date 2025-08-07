@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/HeadquarterLogin.css";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -9,6 +10,7 @@ function HeadquarterLogin() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,8 +25,8 @@ function HeadquarterLogin() {
 
     if (!officerId.trim()) {
       newErrors.officerId = "Officer ID is required.";
-    } else if (!/^HQ\d{4}$/i.test(officerId)) {
-      newErrors.officerId = "Invalid format (e.g., HQ1234).";
+    } else if (!/^HQ\d{1,4}$/i.test(officerId)) {
+      newErrors.officerId = "Invalid format (e.g., HQ1, HQ0001).";
     }
 
     if (!password.trim()) {
@@ -37,28 +39,42 @@ function HeadquarterLogin() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log("HQ Officer Logging in:", {
-        officerId,
-        password,
-        rememberMe,
-      });
-
-      localStorage.setItem(
-        "hqOfficerName",
-        officerId === "HQ0001" ? "HQ Admin Tiwari" : "HQ Officer"
-      );
-
-      if (rememberMe) {
-        localStorage.setItem("rememberedHqOfficerId", officerId);
-      } else {
-        localStorage.removeItem("rememberedHqOfficerId");
+      const match = officerId.match(/^HQ(\d{1,4})$/i);
+      if (!match) {
+        setApiError("Invalid Officer ID format.");
+        return;
       }
 
-      navigate("/headquarter-home"); // Redirect to admin dashboard
+      const adminId = parseInt(match[1], 10); // HQ0001 -> 1
+
+      try {
+        const response = await axios.post("http://localhost:8080/admin/signin", {
+          adminId,
+          password,
+        });
+
+        const { adminName, message } = response.data;
+
+        // Save necessary data
+        localStorage.setItem("adminId", adminId);
+        localStorage.setItem("adminName", adminName);
+        localStorage.setItem("hqOfficerMessage", message);
+
+        if (rememberMe) {
+          localStorage.setItem("rememberedHqOfficerId", officerId);
+        } else {
+          localStorage.removeItem("rememberedHqOfficerId");
+        }
+
+        navigate("/headquarter-home");
+      } catch (error) {
+        console.error("Login failed:", error);
+        setApiError("Invalid Officer ID or Password.");
+      }
     }
   };
 
@@ -74,12 +90,10 @@ function HeadquarterLogin() {
               <input
                 type="text"
                 id="officerId"
-                className={`form-control ${
-                  errors.officerId ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.officerId ? "is-invalid" : ""}`}
                 value={officerId}
                 onChange={(e) => setOfficerId(e.target.value)}
-                placeholder="e.g., HQ1234"
+                placeholder="e.g., HQ0001"
               />
               {errors.officerId && (
                 <div className="invalid-feedback">{errors.officerId}</div>
@@ -91,9 +105,7 @@ function HeadquarterLogin() {
               <input
                 type="password"
                 id="password"
-                className={`form-control ${
-                  errors.password ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
@@ -121,11 +133,13 @@ function HeadquarterLogin() {
               </a>
             </div>
 
+            {apiError && <div className="text-danger mb-2">{apiError}</div>}
+
             <button type="submit" className="login-btn">
               Login
             </button>
 
-            <div className="text-muted">
+            <div className="text-muted mt-2">
               Only authorized officers are allowed.
             </div>
           </form>
