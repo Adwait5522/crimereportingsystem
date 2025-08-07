@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunbeam.dto.AddPoliceStationDTO;
 import com.sunbeam.dto.DesignationDTO;
 import com.sunbeam.dto.PoliceStationDTO;
+import com.sunbeam.dto.PoliceStationUpdateDTO;
 import com.sunbeam.dao.DesignationDao;
 import com.sunbeam.dao.OfficerDao;
 import com.sunbeam.dao.PoliceStationDao;
@@ -114,6 +115,12 @@ public class PoliceStationServiceImpl implements PoliceStationService{
 		PoliceStation policeStation = policeStationDao.findById(id).orElseThrow(()->new CustomExceptionClass("Cannot delete station"));
 		policeStation.setStatus(false);
 		return "Deleted Successfully";
+	}
+
+	@Override
+	public String updatePoliceStation(Long id, PoliceStationUpdateDTO dto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

@@ -6,6 +6,7 @@ import com.sunbeam.dto.OfficerDTO;
 import com.sunbeam.dto.OfficerLoginReqDTO;
 import com.sunbeam.dto.OfficerLoginRespDTO;
 import com.sunbeam.dto.OfficerRespDTO;
+import com.sunbeam.dto.OfficerUpdateDTO;
 
 public interface OfficerService {
 
@@ -15,4 +16,10 @@ public interface OfficerService {
 	String addOfficer(OfficerDTO officerDTO);
 	String updateDesignation(Long id);
 
+	String updateOfficer(Long id, OfficerUpdateDTO dto);
+
+	void deleteOfficer(Long id);
+	OfficerRespDTO getOfficerById(Long id);
+
+	List<OfficerRespDTO> getOfficersByInspector(Long inspectorId);
 }

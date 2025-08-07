@@ -1,6 +1,7 @@
 package com.sunbeam.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.sunbeam.dto.OfficerDTO;
 import com.sunbeam.dto.OfficerLoginReqDTO;
 import com.sunbeam.dto.OfficerLoginRespDTO;
 import com.sunbeam.dto.OfficerRespDTO;
+import com.sunbeam.dto.OfficerUpdateDTO;
 import com.sunbeam.entities.Designation;
 import com.sunbeam.entities.Officer;
 import com.sunbeam.entities.OfficerLogin;
@@ -153,6 +155,66 @@ public class OfficerServiceImpl implements OfficerService {
                     return dto;
                 }).toList();
     }
+	@Override
+	public void deleteOfficer(Long id) {
+		 Officer officer = officerDao.findById(id)
+		            .orElseThrow(() -> new RuntimeException("Officer not found with ID: " + id));
 
+		        if (officer.getActiveStatus() == OfficerStatus.INACTIVE) {
+		            throw new RuntimeException("Officer is already INACTIVE.");
+		        }
+
+		        officer.setActiveStatus(OfficerStatus.INACTIVE);
+		        officerDao.save(officer);	
+	}
+
+	@Override
+	public String updateOfficer(Long id, OfficerUpdateDTO dto) {
+	    Officer officer = officerDao.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Officer not found with ID: " + id));
+
+	        if (dto.getOfficerName() != null) officer.setOfficerName(dto.getOfficerName());
+
+	        if (dto.getDesignationId() != null) {
+	            Designation designation = designationDao.findById(dto.getDesignationId())
+	                .orElseThrow(() -> new RuntimeException("Designation not found"));
+	            officer.setDesignation(designation);
+	        }
+
+	        if (dto.getPoliceStationId() != null) {
+	            PoliceStation station = policeStationDao.findById(dto.getPoliceStationId())
+	                .orElseThrow(() -> new RuntimeException("Police Station not found"));
+	            officer.setPoliceStation(station);
+	        }
+
+	        // ✅ Update Password if present
+	        if (dto.getPassword() != null) {
+	            OfficerLogin login = officerLoginDao.findByOfficerOfficerId(officer.getOfficerId())
+	                .orElseThrow(() -> new RuntimeException("Login credentials not found for Officer ID: " + id));
+	            login.setPassword(dto.getPassword());
+	            officerLoginDao.save(login);
+	        }
+	        officerDao.save(officer);
+	        return "Updated Officer Successfully!!";
+	}
+	
+	@Override
+	public OfficerRespDTO getOfficerById(Long id) {
+		Officer officer = officerDao.findById(id).orElseThrow(()-> new ResourceNotFoundException("Officer not found"));
+		return new OfficerRespDTO(officer.getOfficerId(),officer.getOfficerName(),officer.getDesignation().getDesignationName(),officer.getPoliceStation().getPoliceStationName(),officer.getActiveStatus().toString());
+	}
+
+	@Override
+	public List<OfficerRespDTO> getOfficersByInspector(Long inspectorId) {
+		 Officer inspector = officerDao.findById(inspectorId)
+	                .orElseThrow(() -> new RuntimeException("Inspector not found"));
+
+	        PoliceStation station = inspector.getPoliceStation();
+	        List<Officer> officers = officerDao.findByPoliceStation(station);
+
+	        return officers.stream()
+	                .map(officer -> new OfficerRespDTO(officer.getOfficerId(),officer.getOfficerName(),officer.getDesignation().getDesignationName(),officer.getPoliceStation().getPoliceStationName(),officer.getActiveStatus().name()))
+	                .collect(Collectors.toList());
+	}
 
 }

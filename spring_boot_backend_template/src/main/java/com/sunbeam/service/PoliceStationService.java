@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sunbeam.dto.AddPoliceStationDTO;
 import com.sunbeam.dto.PoliceStationDTO;
+import com.sunbeam.dto.PoliceStationUpdateDTO;
 import com.sunbeam.entities.PoliceStation;
 
 public interface PoliceStationService {
@@ -11,4 +12,5 @@ public interface PoliceStationService {
 	List<PoliceStationDTO> getAllActivePoliceStation();
 	String addPoliceStation(AddPoliceStationDTO addPoliceStationDTO);
 	String deletePoliceStation(Long id);
+	String updatePoliceStation(Long id, PoliceStationUpdateDTO dto);
 }
