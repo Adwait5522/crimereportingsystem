@@ -11,4 +11,12 @@ import com.sunbeam.entities.Complaints;
 public interface ComplaintsDao extends JpaRepository<Complaints, Long> {
 	
 	 List<Complaints> findByPoliceStationIdPoliceStationId(Long policeStationId);
+	 boolean existsByComplaintType(String complaintType);
+
+//		boolean existsByComplaintTypeAndIdNot(String complaintType, Long complaintId);
+	 boolean existsByComplaintTypeAndComplaintIdNot(String complaintType, Long complaintId);
+
+
+//		List<Complaints> findUserById(Long userId);
+	 List<Complaints> findByUserUserId(Long userId);
 }

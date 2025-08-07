@@ -14,7 +14,7 @@ public class ComplaintReqDTO {
     private String complaintType;
     private String description;
     private List<String> evidenceFiles;
-    private String locationPincode;
+    private int locationPincode;
     private String city;
     private String state;
     private String priority; // HIGH, MEDIUM, LOW

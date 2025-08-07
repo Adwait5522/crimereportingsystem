@@ -17,10 +17,13 @@ import com.sunbeam.custom_exceptions.ResourceNotFoundException;
 import com.sunbeam.dto.ApiResponse;
 import com.sunbeam.dto.ComplaintReqDTO;
 import com.sunbeam.dto.ComplaintRespDTO;
+import com.sunbeam.dto.ComplaintResponseDTO;
 import com.sunbeam.dto.PriorityUpdateDTO;
 import com.sunbeam.dto.StatusUpdateDTO;
+import com.sunbeam.dto.UpdateComplaintDTO;
 import com.sunbeam.service.ComplaintsService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -39,6 +42,14 @@ public class ComplaintsController {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
 //        }
 //    }
+    
+    @PostMapping("/{complaint_id}")
+	@Operation(description = "Update complaint details")
+	public ResponseEntity<?> updateComplaints(@PathVariable Long complaint_id, @RequestBody UpdateComplaintDTO dto) 
+	{
+		System.out.println("in update "+complaint_id+" "+dto);
+		return ResponseEntity.ok(complaintsService.updateDetails(complaint_id,dto));
+	}
     
     @GetMapping("/all")
     public ResponseEntity<?> getAllComplaints() {
@@ -80,5 +91,16 @@ public class ComplaintsController {
 	{
 		System.out.println("in delete "+complaint_id);
 		return ResponseEntity.ok(complaintsService.deleteCompliant(complaint_id));
+	}
+    
+    @GetMapping("/user/{userId}")
+	public ResponseEntity<List<ComplaintResponseDTO>> getComplaintsByUserId(@PathVariable Long userId) {
+	    List<ComplaintResponseDTO> complaints = complaintsService.getComplaintsByUserId(userId);
+
+	    if (complaints.isEmpty()) {
+	        return ResponseEntity.noContent().build();
+	    }
+
+	    return ResponseEntity.ok(complaints);
 	}
 }

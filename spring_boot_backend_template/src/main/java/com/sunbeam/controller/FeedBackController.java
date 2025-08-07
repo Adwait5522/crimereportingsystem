@@ -3,6 +3,7 @@ package com.sunbeam.controller;
 import java.util.List;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sunbeam.dto.ApiResponse;
+import com.sunbeam.dto.FeedbackDTO;
 import com.sunbeam.dto.FetchFeedbackDTO;
 //import com.sunbeam.dto.OfficerDTO;
 //import com.sunbeam.dto.PoliceStationDTO;
@@ -46,6 +49,18 @@ public class FeedBackController {
 	@PatchMapping("/{feedbackId}")
 	public String updateSeenStatus(@PathVariable Long feedbackId) {
 		return feedBackService.setSeenStatus(feedbackId);
+	}
+	
+	
+	
+	@PostMapping("/user_login/{userId}/complaint/{complaintId}")
+	public ResponseEntity<ApiResponse> submitFeedback(
+	        @PathVariable Long userId,
+	        @PathVariable Long complaintId,
+	        @RequestBody FeedbackDTO dto) {
+
+	    dto.setComplaintId(complaintId); // auto-set from URL
+	    return ResponseEntity.ok(feedBackService.submitFeedback(userId, dto));
 	}
 	
 }
