@@ -38,4 +38,12 @@ public class Feedback {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    public Feedback(Complaints complaint, User user, int rating, String comments, LocalDateTime createdAt) {
+        this.complaint = complaint;
+        this.user = user;
+        this.rating = rating;
+        this.comments = comments;
+        this.createdAt = createdAt;
+    }
 }
