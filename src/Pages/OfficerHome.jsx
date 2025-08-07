@@ -2,60 +2,49 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import "../styles/OfficerHome.css";
+import axios from "axios";
 
 const OfficerHome = () => {
   const navigate = useNavigate();
 
-  // Simulated login - in production, get this from auth context or localStorage
-  const loggedInOfficerName =
-    localStorage.getItem("officerName") || "Officer Tiwari";
+  const loggedInOfficerName = localStorage.getItem("officerName") || "Officer";
+  const loggedInOfficerId = localStorage.getItem("officerId");
 
   const [statusFilter, setStatusFilter] = useState("All");
-
-  const [cases, setCases] = useState([
-    {
-      id: "C001",
-      title: "Robbery at Mall",
-      status: "Pending",
-      station: "Station A",
-      officer: "Officer Sharma",
-    },
-    {
-      id: "C002",
-      title: "Cyber Fraud",
-      status: "Investigating",
-      station: "Cyber Cell",
-      officer: "Officer Tiwari",
-    },
-    {
-      id: "C003",
-      title: "Hit and Run",
-      status: "Resolved",
-      station: "Station B",
-      officer: "Officer Tiwari",
-    },
-    {
-      id: "C004",
-      title: "Chain Snatching",
-      status: "Rejected",
-      station: "Station A",
-      officer: "Officer Sharma",
-    },
-  ]);
-
+  const [cases, setCases] = useState([]);
   const [filteredCases, setFilteredCases] = useState([]);
 
   useEffect(() => {
-    // Filter by logged-in officer
-    let officerCases = cases.filter((c) => c.officer === loggedInOfficerName);
+    if (!loggedInOfficerId) {
+      console.error("No officer ID found in localStorage.");
+      return;
+    }
 
-    // Apply status filter
+    axios
+      .get(`http://localhost:8080/officers/${loggedInOfficerId}/complaints`)
+      .then((res) => {
+        const complaints = res.data.map((item) => ({
+          id: `C${item.complaintId.toString().padStart(3, "0")}`,
+          complaintId: item.complaintId,
+          title: item.description,
+          complaintType: item.complaintType,
+          city: item.city,
+          state: item.state,
+          status: capitalize(item.status),
+          priority: capitalize(item.priority),
+        }));
+        setCases(complaints);
+      })
+      .catch((err) => console.error("Error fetching complaints:", err));
+  }, [loggedInOfficerId]);
+
+  useEffect(() => {
+    let officerCases = [...cases];
     if (statusFilter !== "All") {
       officerCases = officerCases.filter((c) => c.status === statusFilter);
     }
-
     setFilteredCases(officerCases);
-  }, [cases, statusFilter, loggedInOfficerName]);
+  }, [cases, statusFilter]);
 
   const handleStatusChange = (caseId, newStatus) => {
     setCases((prevCases) =>
@@ -68,11 +57,15 @@ const OfficerHome = () => {
     navigate("/officer-login");
   };
 
+  const goToCaseDetails = (complaintId) => {
+    navigate(`/case/${complaintId}`);
+  };
+
   return (
     <div className="officer-home-container">
       <div className="container officer-home-main">
         <div className="officer-home-header">
-          <h3>Welcome, {loggedInOfficerName}</h3>
+          <h3>Welcome Officer, {loggedInOfficerName}</h3>
           <button className="btn btn-secondary mb-3" onClick={handleLogout}>
             Logout
           </button>
@@ -99,7 +92,8 @@ const OfficerHome = () => {
               <tr>
                 <th>Case ID</th>
                 <th>Title</th>
-                <th>Station</th>
+                <th>Complaint Type</th>
+                <th>City</th>
                 <th>Status</th>
                 <th>Edit Status</th>
               </tr>
@@ -108,12 +102,17 @@ const OfficerHome = () => {
               {filteredCases.map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <a href={`/case/${c.id}`} className="case-id-link">
+                    <span
+                      className="case-id-link"
+                      onClick={() => goToCaseDetails(c.complaintId)}
+                      style={{ color: "#0d6efd", cursor: "pointer" }}
+                    >
                       {c.id}
-                    </a>
+                    </span>
                   </td>
                   <td>{c.title}</td>
-                  <td>{c.station}</td>
+                  <td>{c.complaintType}</td>
+                  <td>{c.city}</td>
                   <td>
                     <span
                       className={`case-status-badge bg-${getStatusColor(
@@ -127,7 +126,9 @@ const OfficerHome = () => {
                     <select
                       className="status-filter-select"
                       value={c.status}
-                      onChange={(e) => handleStatusChange(c.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(c.id, e.target.value)
+                      }
                     >
                       <option value="Pending">Pending</option>
                       <option value="Investigating">Investigating</option>
@@ -162,5 +163,10 @@ const getStatusColor = (status) => {
       return "light";
   }
 };
+
+const capitalize = (str) =>
+  str && str.length > 0
+    ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+    : "";
 
 export default OfficerHome;
