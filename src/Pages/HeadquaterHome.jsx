@@ -68,6 +68,14 @@ function HeadquarterHome() {
                 Add Designation
               </button>
             </div>
+             <div className="col-6 col-sm-3">
+            <button
+              className="btn btn-primary w-100"
+              onClick={() => navigate("/see-officers")}
+            >
+              See Officers
+            </button>
+           </div>
           </div>
 
           <h4 className="mb-3">Total Police Stations</h4>

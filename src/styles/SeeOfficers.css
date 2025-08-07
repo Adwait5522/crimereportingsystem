@@ -1,0 +1,89 @@
+/* Container */
+.officer-home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.officer-home-main {
+  padding: 1.5rem 0;
+  flex-grow: 1;
+}
+
+.officer-home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Reusable Button */
+.blue-btn {
+  background-color: #003d80;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.blue-btn:hover {
+  background-color: #002f66;
+}
+
+/* Table Styles */
+.case-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.case-table th,
+.case-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.case-table th {
+  background-color: #343a40;
+  color: white;
+}
+
+/* Additional Classes if Required */
+.case-status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.bg-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.bg-success {
+  background-color: #198754;
+  color: white;
+}
+
+.bg-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Dropdown Filter Section */
+#stationSelect {
+  max-width: 300px;
+}
