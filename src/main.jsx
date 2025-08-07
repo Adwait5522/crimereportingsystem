@@ -22,6 +22,7 @@ import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
 import FeedBackComplaints from "./Pages/FeedBackComplaints.jsx";
 import AddDesignationForm from "./Pages/AddDesignationForm.jsx";
 import SeeOfficers from "./Pages/SeeOfficers.jsx";
+import UpdateComplaintPage from "./Pages/UpdateComplaintPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -45,6 +46,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/register-user-form" element={<RegisterUserForm />} />
       <Route path="/inspector-home" element={<InspectorHome />} />
       <Route path="/display-officers" element={<SeeOfficers />} />
+      <Route path="/update-complaint" element={<UpdateComplaintPage/>}/>
     </Routes>
   </BrowserRouter>
 );
