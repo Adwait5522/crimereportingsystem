@@ -48,6 +48,8 @@ public class OfficerController {
         
         return officerService.assignStationToOfficer(officerId, stationId);
     }
+	
+	
 
 
 	@PostMapping("/signin")
@@ -84,9 +86,10 @@ public class OfficerController {
 	
 	@PostMapping
 	public String addOfficer(@RequestBody OfficerDTO officerDTO) {
-		officerService.addOfficer(officerDTO);
-		return "Added successfully";	
+	    String newOfficerId = officerService.addOfficer(officerDTO);
+	    return newOfficerId;
 	}
+
 	@GetMapping ("/{id}")
 	public ResponseEntity<?> getOfficerById(@PathVariable Long id) {
 	    OfficerRespDTO officer = officerService.getOfficerById(id);

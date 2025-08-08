@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunbeam.dto.AddPoliceStationDTO;
+import com.sunbeam.dto.CreatePoliceStationDTO;
 import com.sunbeam.dto.DesignationDTO;
 import com.sunbeam.dto.NearestPoliceStationResponseDTO;
 import com.sunbeam.dto.PoliceStationDTO;
@@ -147,13 +148,14 @@ public class PoliceStationServiceImpl implements PoliceStationService{
 	
 	
 	 @Override
-	    public String createPoliceStation(PoliceStationDTO dto) {
+	    public String createPoliceStation(CreatePoliceStationDTO dto) {
 	        // Check if the officer is already assigned as a station head
 	        if (policeStationDao.existsByStationHeadOfficerId(dto.getStationHeadId())) {
 	            throw new IllegalArgumentException("This officer is already assigned as a station head.");
 	        }
 
 	        // Fetch officer by ID
+	        System.out.println(dto.getStationHeadId());
 	        Officer head = officerDao.findById(dto.getStationHeadId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Officer not found"));
 

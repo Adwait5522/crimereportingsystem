@@ -23,6 +23,7 @@ public class OfficerLogin extends BaseEntity {
 
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "login_id")
 	    private Long loginId;
 
 	    @OneToOne

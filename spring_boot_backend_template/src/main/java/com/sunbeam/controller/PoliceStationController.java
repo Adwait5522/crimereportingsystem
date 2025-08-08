@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.AddPoliceStationDTO;
+import com.sunbeam.dto.CreatePoliceStationDTO;
 import com.sunbeam.dto.NearestPoliceStationRequestDTO;
 import com.sunbeam.dto.NearestPoliceStationResponseDTO;
 import com.sunbeam.dto.PoliceStationDTO;
@@ -46,7 +47,7 @@ public class PoliceStationController {
 	}
 	
 	@PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody PoliceStationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody CreatePoliceStationDTO dto) {
         String msg = policeStationService.createPoliceStation(dto);
         return ResponseEntity.ok(msg);
     }

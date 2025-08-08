@@ -7,6 +7,7 @@ import com.sunbeam.dto.OfficerLoginReqDTO;
 import com.sunbeam.dto.OfficerLoginRespDTO;
 import com.sunbeam.dto.OfficerRespDTO;
 import com.sunbeam.dto.OfficerUpdateDTO;
+import com.sunbeam.entities.OfficerLogin;
 
 public interface OfficerService {
 
@@ -28,5 +29,6 @@ public interface OfficerService {
 
 	
 	List<OfficerRespDTO> getUnassignedOfficers();
+	OfficerLogin addOfficerLogin(OfficerLoginReqDTO dto);
 
 }
