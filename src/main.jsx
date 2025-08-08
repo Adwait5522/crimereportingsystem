@@ -19,6 +19,12 @@ import FileComplaintForm from "./Pages/FileComplaintForm.jsx";
 import ComplaintPage from "./Pages/ComplaintPage.jsx";
 
 import AddOfficerForm from "./Pages/AddOfficerForm.jsx";
+import FeedBackComplaints from "./Pages/FeedBackComplaints.jsx";
+import AddDesignationForm from "./Pages/AddDesignationForm.jsx";
+import SeeOfficers from "./Pages/SeeOfficers.jsx";
+import UpdateComplaintPage from "./Pages/UpdateComplaintPage.jsx";
+import FeedbackForm from "./Pages/Feedback.jsx";
+import AssignStation from "./Pages/AssignStation.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -27,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/register" element={<Register />} />
       <Route path="/complaint" element={<ComplaintPage />} />
       <Route path="/officer-login" element={<OfficerLogin />} />
+      <Route path="/assign-station" element={<AssignStation />} />
       <Route path="/user-login" element={<UserLogin />} />
       <Route path="/add-station" element={<AddPoliceStation />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
@@ -35,10 +42,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/head-password" element={<ForgotPassword />} />
       <Route path="/officer-home" element={<OfficerHome />} />
       <Route path="/add-officer" element={<AddOfficerForm />} />
+      <Route path="/feedback-complaints" element={<FeedBackComplaints />} />
+      <Route path="/feedback" element={<FeedbackForm />} />
+      <Route path="/add-designation" element={<AddDesignationForm/>}/>
       <Route path="/case/:caseId" element={<CaseDetails />} />
       <Route path="/file-complaint" element={<FileComplaintForm />} />
       <Route path="/register-user-form" element={<RegisterUserForm />} />
       <Route path="/inspector-home" element={<InspectorHome />} />
+      <Route path="/display-officers" element={<SeeOfficers />} />
+      <Route path="/update-complaint" element={<UpdateComplaintPage/>}/>
     </Routes>
   </BrowserRouter>
 );
