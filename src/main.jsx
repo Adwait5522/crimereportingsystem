@@ -23,7 +23,7 @@ import FeedBackComplaints from "./Pages/FeedBackComplaints.jsx";
 import AddDesignationForm from "./Pages/AddDesignationForm.jsx";
 import SeeOfficers from "./Pages/SeeOfficers.jsx";
 import UpdateComplaintPage from "./Pages/UpdateComplaintPage.jsx";
-import FeedbackForm from "./Pages/FeedBackComplaints.jsx";
+import FeedbackForm from "./Pages/Feedback.jsx";
 import AssignStation from "./Pages/AssignStation.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
