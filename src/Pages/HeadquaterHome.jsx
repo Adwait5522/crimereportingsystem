@@ -76,6 +76,14 @@ function HeadquarterHome() {
               See Officers
             </button>
            </div>
+           <div className="col-6 col-sm-3">
+            <button
+              className="btn btn-primary w-100"
+              onClick={() => navigate("/display-officers")}
+            >
+              Assign Station to Officer
+            </button>
+           </div>
           </div>
 
           <h4 className="mb-3">Total Police Stations</h4>

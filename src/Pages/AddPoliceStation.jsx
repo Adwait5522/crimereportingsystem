@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../Components/Footer';
 import Header from '../Components/Header';
+import { useNavigate } from 'react-router-dom';
 import "../styles/AddPoliceStation.css";
 
 const AddPoliceStation = () => {
   const [investigatingOfficers, setInvestigatingOfficers] = useState([]);
   const [selectedOfficerId, setSelectedOfficerId] = useState("");
-
   const [stationForm, setStationForm] = useState({
     name: "",
     pincode: "",
     mapLink: ""
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get("http://localhost:8080/officers/inspectors")
@@ -38,29 +40,24 @@ const AddPoliceStation = () => {
     }
 
     try {
-     
       const stationPayload = {
-  policeStationName: stationForm.name,
-  policeStationPincode: parseInt(stationForm.pincode),
-  stationHeadId: parseInt(selectedOfficerId),
-  numberOfOfficers: 0, // or any value you want to start with
-  mapsLink: stationForm.mapLink
-};
+        policeStationName: stationForm.name,
+        policeStationPincode: parseInt(stationForm.pincode),
+        stationHeadId: parseInt(selectedOfficerId),
+        numberOfOfficers: 0,
+        mapsLink: stationForm.mapLink
+      };
 
-
-
-console.log("Sending station registration data:", stationPayload);
+      console.log("Sending station registration data:", stationPayload);
 
       await axios.post("http://localhost:8080/policestation", stationPayload);
 
-      // Step 2: Update the officer's designation
       await axios.patch(`http://localhost:8080/officers/update-designation-incharge?id=${selectedOfficerId}`);
 
       alert("Police Station registered and Officer promoted to Station Incharge!");
 
-      // Reset form
-      setStationForm({ name: "", pincode: "", mapLink: "" });
-      setSelectedOfficerId("");
+      // Redirect to Headquarter Home
+      navigate("/headquarter-home");
 
     } catch (error) {
       console.error("Error registering station or updating designation:", error);
