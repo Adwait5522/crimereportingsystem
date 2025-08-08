@@ -24,5 +24,9 @@ public interface OfficerService {
 	List<OfficerRespDTO> getOfficersByInspector(Long inspectorId);
 	
 	List<OfficerRespDTO> getAllOfficers();
+	String assignStationToOfficer(Long officerId, Long policeStationId);
+
+	
+	List<OfficerRespDTO> getUnassignedOfficers();
 
 }

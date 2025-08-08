@@ -1,5 +1,7 @@
 package com.sunbeam.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Officer extends BaseEntity {
+public class Officer{
 
 
 	 @Id
@@ -39,5 +41,8 @@ public class Officer extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "police_station_id", referencedColumnName = "police_station_id",nullable = true)
     private PoliceStation policeStation;
+    
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
 }

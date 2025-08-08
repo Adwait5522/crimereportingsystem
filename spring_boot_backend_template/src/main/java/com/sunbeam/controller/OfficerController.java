@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.dto.ApiResponse;
@@ -39,6 +40,14 @@ public class OfficerController {
 	public ResponseEntity<List<OfficerRespDTO>> getAllOfficers() {
 	    return ResponseEntity.ok(officerService.getAllOfficers());
 	}
+	
+	@PatchMapping("/assign-station")
+    public String assignStationToOfficer(
+        @RequestParam Long officerId,
+        @RequestParam Long stationId) {
+        
+        return officerService.assignStationToOfficer(officerId, stationId);
+    }
 
 
 	@PostMapping("/signin")
@@ -54,6 +63,12 @@ public class OfficerController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Invalid input"));
 		}
 	}
+	
+	@GetMapping("/officers/unassigned")
+	public ResponseEntity<List<OfficerRespDTO>> getUnassignedOfficers() {
+	    return ResponseEntity.ok(officerService.getUnassignedOfficers());
+	}
+
 	
 	@GetMapping("/inspectors")
 	public ResponseEntity<?> getAllInspectors() {

@@ -158,28 +158,45 @@ public class OfficerServiceImpl implements OfficerService {
 //                }).toList();
 //    }
     
+//    @Override
+//    public List<OfficerRespDTO> getAllInspectors() {
+//        List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_incharge");
+//
+//        return allOfficers.stream()
+//                .map(officer -> {
+//                    OfficerRespDTO dto = new OfficerRespDTO();
+//                    dto.setOfficerId(officer.getOfficerId());
+//                    dto.setOfficerName(officer.getOfficerName());
+//                    dto.setDesignation(officer.getDesignation().getDesignationName());
+//
+//                    // Null check for policeStation
+//                    if (officer.getPoliceStation() != null) {
+//                        dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
+//                    } else {
+//                        dto.setPoliceStationName("Not Assigned"); // or use null or empty string
+//                    }
+//
+//                    dto.setStatus(officer.getActiveStatus().toString());
+//                    return dto;
+//                }).toList();
+//    }
     @Override
     public List<OfficerRespDTO> getAllInspectors() {
         List<Officer> allOfficers = officerDao.findByDesignationDesignationNameIgnoreCase("station_incharge");
 
         return allOfficers.stream()
+                .filter(officer -> officer.getPoliceStation() == null) // ⬅ only null police station
                 .map(officer -> {
                     OfficerRespDTO dto = new OfficerRespDTO();
                     dto.setOfficerId(officer.getOfficerId());
                     dto.setOfficerName(officer.getOfficerName());
                     dto.setDesignation(officer.getDesignation().getDesignationName());
-
-                    // Null check for policeStation
-                    if (officer.getPoliceStation() != null) {
-                        dto.setPoliceStationName(officer.getPoliceStation().getPoliceStationName());
-                    } else {
-                        dto.setPoliceStationName("Not Assigned"); // or use null or empty string
-                    }
-
+                    dto.setPoliceStationName("Not Assigned");
                     dto.setStatus(officer.getActiveStatus().toString());
                     return dto;
                 }).toList();
     }
+
 	@Override
 	public void deleteOfficer(Long id) {
 		 Officer officer = officerDao.findById(id)
@@ -241,5 +258,41 @@ public class OfficerServiceImpl implements OfficerService {
 	                .map(officer -> new OfficerRespDTO(officer.getOfficerId(),officer.getOfficerName(),officer.getDesignation().getDesignationName(),officer.getPoliceStation().getPoliceStationName(),officer.getActiveStatus().name()))
 	                .collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<OfficerRespDTO> getUnassignedOfficers() {
+	    Long designationId = 2L; // Station Incharge ID
+	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationId(designationId);
 
+	    return unassigned.stream()
+	            .map(officer -> {
+	                OfficerRespDTO dto = new OfficerRespDTO();
+	                dto.setOfficerId(officer.getOfficerId());
+	                dto.setOfficerName(officer.getOfficerName());
+	                dto.setDesignation(officer.getDesignation().getDesignationName());
+	                dto.setPoliceStationName("Not Assigned");
+	                dto.setStatus(officer.getActiveStatus().toString());
+	                return dto;
+	            })
+	            .collect(Collectors.toList());
+	}
+	
+	@Override
+	public String assignStationToOfficer(Long officerId, Long policeStationId) {
+	    Officer officer = officerDao.findById(officerId)
+	        .orElseThrow(() -> new CustomExceptionClass("Officer not found with id: " + officerId));
+	    
+	    PoliceStation station = policeStationDao.findById(policeStationId)
+	        .orElseThrow(() -> new CustomExceptionClass("Police Station not found with id: " + policeStationId));
+	    
+	    officer.setPoliceStation(station);
+	    officerDao.save(officer);
+	    
+	    return "Police Station assigned to Officer successfully!";
+	}
+
+	
+	
+	
+	
 }
