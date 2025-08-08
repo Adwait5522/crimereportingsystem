@@ -13,5 +13,5 @@ public interface FeedBackService {
 	List<FetchFeedbackDTO> getAllFeedBack();
 	List<FetchFeedbackDTO> getUnseenFeedbacks();
 	String setSeenStatus(Long Id);
-	ApiResponse submitFeedback(Long userId, FeedbackDTO dto) ;
+	ApiResponse submitFeedback(Long userId, FeedbackDTO dto,Long complaintId) ;
 }

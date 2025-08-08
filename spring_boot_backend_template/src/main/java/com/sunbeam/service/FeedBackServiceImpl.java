@@ -79,8 +79,8 @@ public class FeedBackServiceImpl implements FeedBackService{
 	}
 	
 	@Override
-    public ApiResponse submitFeedback(Long userId, FeedbackDTO dto) {
-        Complaints complaint = complaintsDao.findById(dto.getComplaintId())
+    public ApiResponse submitFeedback(Long userId, FeedbackDTO dto,Long complaintId) {
+        Complaints complaint = complaintsDao.findById(complaintId)
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
 
         User user = userDao.findById(userId)

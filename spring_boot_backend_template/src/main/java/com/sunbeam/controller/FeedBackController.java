@@ -59,8 +59,8 @@ public class FeedBackController {
 	        @PathVariable Long complaintId,
 	        @RequestBody FeedbackDTO dto) {
 
-	    dto.setComplaintId(complaintId); // auto-set from URL
-	    return ResponseEntity.ok(feedBackService.submitFeedback(userId, dto));
+//	    dto.setComplaintId(complaintId); // auto-set from URL
+	    return ResponseEntity.ok(feedBackService.submitFeedback(userId, dto,complaintId));
 	}
 	
 }

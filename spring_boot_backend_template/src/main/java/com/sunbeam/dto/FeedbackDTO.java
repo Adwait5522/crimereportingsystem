@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class FeedbackDTO {
 	
-    private Long complaintId;
-
-    private Long userId;
+//    private Long complaintId;
+//
+//    private Long userId;
 
     private int rating;
 
