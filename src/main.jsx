@@ -24,6 +24,7 @@ import AddDesignationForm from "./Pages/AddDesignationForm.jsx";
 import SeeOfficers from "./Pages/SeeOfficers.jsx";
 import UpdateComplaintPage from "./Pages/UpdateComplaintPage.jsx";
 import FeedbackForm from "./Pages/FeedBackComplaints.jsx";
+import AssignStation from "./Pages/AssignStation.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/register" element={<Register />} />
       <Route path="/complaint" element={<ComplaintPage />} />
       <Route path="/officer-login" element={<OfficerLogin />} />
+      <Route path="/assign-station" element={<AssignStation />} />
       <Route path="/user-login" element={<UserLogin />} />
       <Route path="/add-station" element={<AddPoliceStation />} />
       <Route path="/headquarter-login" element={<HeadquarterLogin />} />
