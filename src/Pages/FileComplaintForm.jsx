@@ -1,17 +1,20 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Footer from "../Components/Footer";
+import { useNavigate } from "react-router-dom"; // ✅ Added
 
 const FileComplaintForm = () => {
+  const navigate = useNavigate(); // ✅ Added
+
   const [formData, setFormData] = useState({
     complaintType: "",
-    evidenceFiles: [],
-    location: "",
-    pincode: "",
+    description: "",
     city: "",
     state: "",
+    locationPincode: "",
   });
-
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const states = [
     "Maharashtra",
@@ -34,37 +37,94 @@ const FileComplaintForm = () => {
     "Other",
   ];
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "evidenceFiles") {
-      setFormData((prev) => ({ ...prev, [name]: Array.from(files) }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.complaintType)
       newErrors.complaintType = "Complaint type is required.";
-    if (!formData.location.trim()) newErrors.location = "Location is required.";
-    if (!formData.pincode || !/^\d{6}$/.test(formData.pincode))
-      newErrors.pincode = "Valid 6-digit pincode is required.";
+    if (!formData.description.trim())
+      newErrors.description = "Description is required.";
     if (!formData.city.trim()) newErrors.city = "City is required.";
     if (!formData.state) newErrors.state = "State is required.";
-
+    if (
+      !formData.locationPincode ||
+      !/^\d{6}$/.test(formData.locationPincode)
+    ) {
+      newErrors.locationPincode = "Valid 6-digit pincode is required.";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Complaint submitted:", formData);
-      alert("Complaint submitted successfully!");
-      // API call or form reset can go here
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      // 1️⃣ Get lat/lon from OpenStreetMap
+      const geoRes = await axios.get(
+        `https://nominatim.openstreetmap.org/search?postalcode=${formData.locationPincode}&country=India&format=json`
+      );
+
+      if (!geoRes.data.length) {
+        alert("Could not find location for the given pincode.");
+        setLoading(false);
+        return;
+      }
+
+      const { lat, lon } = geoRes.data[0];
+
+      // 2️⃣ Find nearest police station
+      const nearestRes = await axios.post(
+        "http://localhost:8080/policestation/nearest",
+        {
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lon),
+        }
+      );
+
+      const policeStationId = nearestRes.data.policeStationId;
+
+      // 3️⃣ Register complaint
+      const complaintPayload = {
+        userId: 1, // TODO: replace with logged-in user ID
+        policeStationId,
+        complaintType: formData.complaintType,
+        description: formData.description,
+        evidenceFiles: [], // handle uploads separately
+        locationPincode: parseInt(formData.locationPincode),
+        city: formData.city,
+        state: formData.state,
+        priority: "MEDIUM",
+      };
+
+      const regRes = await axios.post(
+        "http://localhost:8080/complaints/register",
+        complaintPayload,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      alert(regRes.data.message || "Complaint registered successfully!");
+
+      navigate("/complaint"); // ✅ Navigate after success
+
+      setFormData({
+        complaintType: "",
+        description: "",
+        city: "",
+        state: "",
+        locationPincode: "",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while submitting the complaint.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,10 +138,8 @@ const FileComplaintForm = () => {
             <div className="mb-3">
               <label className="form-label">Complaint Type</label>
               <select
-                className={`form-select ${
-                  errors.complaintType ? "is-invalid" : ""
-                }`}
                 name="complaintType"
+                className={`form-select ${errors.complaintType ? "is-invalid" : ""}`}
                 value={formData.complaintType}
                 onChange={handleChange}
               >
@@ -97,33 +155,17 @@ const FileComplaintForm = () => {
               )}
             </div>
 
-            {/* Evidence Files */}
-            {/* <div className="mb-3">
-              <label className="form-label">Upload Evidence Files</label>
-              <input
-                type="file"
-                name="evidenceFiles"
-                multiple
-                className="form-control"
-                onChange={handleChange}
-              />
-            </div> */}
-
-            {/* Location */}
+            {/* Description */}
             <div className="mb-3">
-              <label className="form-label">Location</label>
-              <input
-                type="text"
-                className={`form-control ${
-                  errors.location ? "is-invalid" : ""
-                }`}
-                name="location"
-                value={formData.location}
+              <label className="form-label">Description</label>
+              <textarea
+                name="description"
+                className={`form-control ${errors.description ? "is-invalid" : ""}`}
+                value={formData.description}
                 onChange={handleChange}
-                placeholder="Exact address or area"
-              />
-              {errors.location && (
-                <div className="invalid-feedback">{errors.location}</div>
+              ></textarea>
+              {errors.description && (
+                <div className="invalid-feedback">{errors.description}</div>
               )}
             </div>
 
@@ -132,14 +174,13 @@ const FileComplaintForm = () => {
               <label className="form-label">Pincode</label>
               <input
                 type="number"
-                className={`form-control ${errors.pincode ? "is-invalid" : ""}`}
-                name="pincode"
-                value={formData.pincode}
+                name="locationPincode"
+                className={`form-control ${errors.locationPincode ? "is-invalid" : ""}`}
+                value={formData.locationPincode}
                 onChange={handleChange}
-                placeholder="6-digit pincode"
               />
-              {errors.pincode && (
-                <div className="invalid-feedback">{errors.pincode}</div>
+              {errors.locationPincode && (
+                <div className="invalid-feedback">{errors.locationPincode}</div>
               )}
             </div>
 
@@ -148,8 +189,8 @@ const FileComplaintForm = () => {
               <label className="form-label">City</label>
               <input
                 type="text"
-                className={`form-control ${errors.city ? "is-invalid" : ""}`}
                 name="city"
+                className={`form-control ${errors.city ? "is-invalid" : ""}`}
                 value={formData.city}
                 onChange={handleChange}
               />
@@ -162,8 +203,8 @@ const FileComplaintForm = () => {
             <div className="mb-3">
               <label className="form-label">State</label>
               <select
-                className={`form-select ${errors.state ? "is-invalid" : ""}`}
                 name="state"
+                className={`form-select ${errors.state ? "is-invalid" : ""}`}
                 value={formData.state}
                 onChange={handleChange}
               >
@@ -180,8 +221,12 @@ const FileComplaintForm = () => {
             </div>
 
             {/* Submit */}
-            <button type="submit" className="btn btn-primary w-100">
-              Submit Complaint
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Submit Complaint"}
             </button>
           </form>
         </div>
