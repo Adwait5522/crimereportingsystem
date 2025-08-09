@@ -303,18 +303,17 @@ function FeedbackForm() {
 
     try {
       await axios.post(
-        `http://localhost:8080/feedback/user_login/${userId}/complaint/${complaintId}`,
+        `http://localhost:8080/feedBack/user_login/${userId}/complaint/${complaintId}`,
         {
-          comment,
+          comments : comment,
           rating: parseInt(rating),
         },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-
       alert("Feedback submitted successfully.");
-      navigate("/complaints"); 
+      navigate("/complaint"); 
     } catch (error) {
       console.error("Error submitting feedback:", error);
       alert("Failed to submit feedback. Try again.");

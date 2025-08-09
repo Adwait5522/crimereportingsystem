@@ -312,7 +312,7 @@ const ComplaintPage = () => {
 
   // Navigate to feedback page
   const handleFeedback = (complaintId, userId) => {
-    navigate(`/feedback`);
+    navigate(`/feedback`, { state: { complaintId, userId } });
   };
 
   return (
