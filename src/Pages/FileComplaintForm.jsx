@@ -5,7 +5,12 @@ import { data, useNavigate } from "react-router-dom"; // ✅ Added
 
 const FileComplaintForm = () => {
   const navigate = useNavigate(); // ✅ Added
-
+const storedUserId = localStorage.getItem('userId');
+    if (!storedUserId) {
+      console.error("No userId found in localStorage. Redirecting to login.");
+      navigate('/user_login');
+      return;
+    }
   const [formData, setFormData] = useState({
     complaintType: "",
     description: "",
@@ -67,9 +72,10 @@ const FileComplaintForm = () => {
     setLoading(true);
     try {
       // 1️⃣ Get lat/lon from OpenStreetMap
-      const geoRes = await axios.get(
-        `https://nominatim.openstreetmap.org/search?postalcode=${formData.locationPincode}&country=India&format=json`
-      );
+      const geoRes = await axios.get("http://localhost:8080/api/location/search", {
+      params: { postalcode: formData.locationPincode }
+    });
+
 
       if (!geoRes.data.length) {
         alert("Could not find location for the given pincode.");
@@ -78,7 +84,7 @@ const FileComplaintForm = () => {
       }
 
       const { lat, lon } = geoRes.data[0];
-      console.log(lat);
+      console.log(lat+lon);
       // 2️⃣ Find nearest police station
       const nearestRes = await axios.post(
         "http://localhost:8080/policestation/nearest",
@@ -89,10 +95,9 @@ const FileComplaintForm = () => {
       );
 
       const policeStationId = nearestRes.data.policeStationId;
-
       // 3️⃣ Register complaint
       const complaintPayload = {
-        userId: 1, // TODO: replace with logged-in user ID
+        userId: storedUserId, // TODO: replace with logged-in user ID
         policeStationId,
         complaintType: formData.complaintType,
         description: formData.description,
