@@ -184,9 +184,9 @@ const AddPoliceStation = () => {
 
   try {
     // 1️⃣ Get latitude & longitude from pincode using OpenStreetMap API
-    const geoRes = await axios.get(
-      `https://nominatim.openstreetmap.org/search?postalcode=${stationForm.pincode}&country=India&format=json`
-    );
+     const geoRes = await axios.get("http://localhost:8080/api/location/search", {
+      params: { postalcode: stationForm.pincode}
+    });
 
     if (!geoRes.data.length) {
       alert("Could not find location for the given pincode.");
