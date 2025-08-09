@@ -147,37 +147,64 @@ public class PoliceStationServiceImpl implements PoliceStationService{
 	}
 	
 	
-	 @Override
-	    public String createPoliceStation(CreatePoliceStationDTO dto) {
-	        // Check if the officer is already assigned as a station head
-	        if (policeStationDao.existsByStationHeadOfficerId(dto.getStationHeadId())) {
-	            throw new IllegalArgumentException("This officer is already assigned as a station head.");
-	        }
-
-	        // Fetch officer by ID
-	        System.out.println(dto.getStationHeadId());
-	        Officer head = officerDao.findById(dto.getStationHeadId())
-	            .orElseThrow(() -> new ResourceNotFoundException("Officer not found"));
-
-	        // Create police station entity
-	        PoliceStation ps = new PoliceStation();
-	        ps.setPoliceStationName(dto.getPoliceStationName());
-	        ps.setPoliceStationPincode(dto.getPoliceStationPincode());
-	        ps.setNumberOfOfficers(dto.getNumberOfOfficers());
-//	        ps.setMapsLink(dto.getMapsLink());
-	        ps.setStationHead(head);
-	        ps.setStatus(true);
-
-
-
-	        ps.setLatitude(dto.getLatitude());
-	        ps.setLongitude(dto.getLongitude());
-
-	        
-	        // Save the entity
-	        policeStationDao.save(ps);
-	        return "Police station created successfully!";
+//	 @Override
+//	    public String createPoliceStation(CreatePoliceStationDTO dto) {
+//	        // Check if the officer is already assigned as a station head
+//	        if (policeStationDao.existsByStationHeadOfficerId(dto.getStationHeadId())) {
+//	            throw new IllegalArgumentException("This officer is already assigned as a station head.");
+//	        }
+//
+//	        // Fetch officer by ID
+//	        System.out.println(dto.getStationHeadId());
+//	        Officer head = officerDao.findById(dto.getStationHeadId())
+//	            .orElseThrow(() -> new ResourceNotFoundException("Officer not found"));
+//
+//	        // Create police station entity
+//	        PoliceStation ps = new PoliceStation();
+//	        ps.setPoliceStationName(dto.getPoliceStationName());
+//	        ps.setPoliceStationPincode(dto.getPoliceStationPincode());
+//	        ps.setNumberOfOfficers(dto.getNumberOfOfficers());
+////	        ps.setMapsLink(dto.getMapsLink());
+//	        ps.setStationHead(head);
+//	        ps.setStatus(true);
+//
+//
+//
+//	        ps.setLatitude(dto.getLatitude());
+//	        ps.setLongitude(dto.getLongitude());
+//
+//	        
+//	        // Save the entity
+//	        policeStationDao.save(ps);
+//	        return "Police station created successfully!";
+//	    }
+	
+	@Override
+	public Long createPoliceStation(CreatePoliceStationDTO dto) {
+	    // Check if the officer is already assigned as a station head
+	    if (policeStationDao.existsByStationHeadOfficerId(dto.getStationHeadId())) {
+	        throw new IllegalArgumentException("This officer is already assigned as a station head.");
 	    }
+
+	    // Fetch officer by ID
+	    Officer head = officerDao.findById(dto.getStationHeadId())
+	        .orElseThrow(() -> new ResourceNotFoundException("Officer not found"));
+
+	    // Create police station entity
+	    PoliceStation ps = new PoliceStation();
+	    ps.setPoliceStationName(dto.getPoliceStationName());
+	    ps.setPoliceStationPincode(dto.getPoliceStationPincode());
+	    ps.setNumberOfOfficers(dto.getNumberOfOfficers());
+	    ps.setStationHead(head);
+	    ps.setStatus(true);
+	    ps.setLatitude(dto.getLatitude());
+	    ps.setLongitude(dto.getLongitude());
+
+	    // Save entity and return generated ID
+	    PoliceStation saved = policeStationDao.save(ps);
+	    return saved.getPoliceStationId(); // assuming your entity has getPoliceStationId()
+	}
+
 
 	    // Method to check if station head is already assigned
 	    @Override

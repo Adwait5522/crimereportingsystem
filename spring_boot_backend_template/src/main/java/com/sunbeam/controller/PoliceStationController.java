@@ -46,11 +46,17 @@ public class PoliceStationController {
 		return "Added successfully";	
 	}
 	
+//	@PostMapping("/create")
+//    public ResponseEntity<?> create(@RequestBody CreatePoliceStationDTO dto) {
+//        String msg = policeStationService.createPoliceStation(dto);
+//        return ResponseEntity.ok(msg);
+//    }
 	@PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody CreatePoliceStationDTO dto) {
-        String msg = policeStationService.createPoliceStation(dto);
-        return ResponseEntity.ok(msg);
-    }
+	public ResponseEntity<?> create(@RequestBody CreatePoliceStationDTO dto) {
+	    Long id = policeStationService.createPoliceStation(dto);
+	    return ResponseEntity.ok(id);
+	}
+
 	
 	@DeleteMapping("/{policeStaionId}")
 	public String deletePoliceStation(@PathVariable Long policeStaionId) {

@@ -15,7 +15,7 @@ public interface PoliceStationService {
 //	String addPoliceStation(AddPoliceStationDTO addPoliceStationDTO);
 	String deletePoliceStation(Long id);
 	String updatePoliceStation(Long id, PoliceStationUpdateDTO dto);
-	 String createPoliceStation(CreatePoliceStationDTO dto);
+	 Long createPoliceStation(CreatePoliceStationDTO dto);
 	    
 	    boolean existsByStationHeadOfficerId(Long officerId);
 	    
