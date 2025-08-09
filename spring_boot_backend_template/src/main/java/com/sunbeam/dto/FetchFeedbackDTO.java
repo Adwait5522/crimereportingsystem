@@ -11,7 +11,7 @@ public class FetchFeedbackDTO {
 	
     private Long complaintId;
 
-    private Long userId;
+    private Long policeStationId;
 
     private int rating;
 

@@ -57,11 +57,12 @@ public class FeedBackServiceImpl implements FeedBackService{
 	    FetchFeedbackDTO dto = new FetchFeedbackDTO();
 	    dto.setFeedBackId(feedback.getFeedbackId());
 	    dto.setComplaintId(feedback.getComplaint().getComplaintId());
-	    dto.setUserId(feedback.getUser().getUserId());
+	    dto.setPoliceStationId(feedback.getComplaint().getPoliceStation().getPoliceStationId()); // Fetch from complaint
 	    dto.setRating(feedback.getRating());
 	    dto.setComments(feedback.getComments());
 	    return dto;
 	}
+
 	
 	public List<FetchFeedbackDTO> mapToDTOList(List<Feedback> feedbackList) {
 	    return feedbackList.stream()

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePoliceStationDTO {
+	
     private String policeStationName;
     private Integer policeStationPincode;
     private Integer numberOfOfficers;
