@@ -25,7 +25,9 @@ function HeadquarterHome() {
   }, []);
 
   const handleLogout = () => {
+      localStorage.removeItem("adminId");
     localStorage.removeItem("adminName");
+    localStorage.removeItem("hqOfficerMessage");
     navigate("/headquarter-login");
   };
 

@@ -22,9 +22,6 @@ const UserLogin = () => {
       });
 
       const user = response.data;
-
-      
-
       // Save user data in localStorage
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('userId', user.userId);

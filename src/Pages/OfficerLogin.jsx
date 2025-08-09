@@ -364,7 +364,7 @@ const OfficerLogin = () => {
         console.log("Login response:", data);
 
         // Store login info
-        localStorage.setItem("officerId", badgeId);
+        localStorage.setItem("officerId", officerId);
         localStorage.setItem("designationId", data.designationId);
         localStorage.setItem("loginMessage", data.message);
 
