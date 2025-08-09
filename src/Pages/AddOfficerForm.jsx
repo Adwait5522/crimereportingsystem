@@ -9,6 +9,7 @@ const AddOfficerForm = () => {
     officerName: "",
     designationId: "",
     policeStationId: "",
+    password: "",           // Added password state
   });
 
   const [designations, setDesignations] = useState([]);
@@ -28,32 +29,45 @@ const AddOfficerForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value }); // Keep values as strings for select control
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const payload = {
       officerName: form.officerName,
       designationId: parseInt(form.designationId),
-      policeStationId: parseInt(form.policeStationId),
+      policeStationId: form.policeStationId ? parseInt(form.policeStationId) : null,
     };
-    console.log("Data to send:", payload);  // <-- Log the payload here
+
     try {
-      await axios.post("http://localhost:8080/officers", payload);
-      alert("Officer added successfully!");
-      // Optionally reset form here
-      setForm({ officerName: "", designationId: "", policeStationId: "" });
+      // 1. Create officer, get the new officer ID from response
+      const officerResponse = await axios.post("http://localhost:8080/officers", payload);
+      const newOfficerId = officerResponse.data; // assuming the server returns just the ID as string or number
+
+      console.log("New officer ID:", newOfficerId);
+
+      // 2. Now add login with officerId and password
+      const loginPayload = {
+        officerId: Number(newOfficerId),
+        password: form.password,
+      };
+
+      await axios.post("http://localhost:8080/officerlogin/add-login", loginPayload);
+
+      alert("Officer and login added successfully!");
+
+      // Reset form after success
+      setForm({ officerName: "", designationId: "", policeStationId: "", password: "" });
     } catch (error) {
       console.error(error);
-      alert("Error adding officer.");
+      alert("Error adding officer or login.");
     }
   };
 
   const formatDesignation = (value) =>
-    value
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase());
+    value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
   const capitalize = (text) =>
     text ? text.charAt(0).toUpperCase() + text.slice(1) : "";
@@ -95,6 +109,7 @@ const AddOfficerForm = () => {
             </select>
           </div>
 
+          {/* If you want to enable police station select again, just uncomment */}
           {/* <div className="mb-3">
             <label className="form-label">Police Station</label>
             <select
@@ -102,19 +117,31 @@ const AddOfficerForm = () => {
               className="form-control"
               onChange={handleChange}
               value={form.policeStationId}
-              required
             >
               <option value="">Select Police Station</option>
               {stations.map((station) => (
                 <option
                   key={station.policeStationId}
-                  value={station.policeStationId}
+                  value={station.policeStationId.toString()}
                 >
                   {capitalize(station.policeStationName)}
                 </option>
               ))}
             </select>
           </div> */}
+
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              placeholder="Set Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
           <button type="submit" className="btn btn-primary">
             Add Officer
