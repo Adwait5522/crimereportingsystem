@@ -24,4 +24,5 @@ import lombok.*;
 public class OfficerLoginRespDTO {
     private String message;
     private Long designationId; // ✅ new field
+    private String officerName;
 }
