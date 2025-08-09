@@ -21,6 +21,8 @@ import com.sunbeam.dto.ComplaintResponseDTO;
 import com.sunbeam.dto.PriorityUpdateDTO;
 import com.sunbeam.dto.StatusUpdateDTO;
 import com.sunbeam.dto.UpdateComplaintDTO;
+import com.sunbeam.dto.UpdateComplaintPriorityDTO;
+import com.sunbeam.dto.UpdateComplaintStatusDTO;
 import com.sunbeam.service.ComplaintsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -114,5 +116,20 @@ public class ComplaintsController {
             @PathVariable Long officerId) {
         	complaintsService.assignOfficer(complaintId, officerId);
         return ResponseEntity.ok("Officer assigned successfully.");
+    }
+    
+    
+    
+    
+    @PutMapping("/change-priority")
+    public ResponseEntity<String> changePriority(@RequestBody UpdateComplaintPriorityDTO dto) {
+        complaintsService.updateComplaintPriority(dto.getComplaintId(), dto.getPriority());
+        return ResponseEntity.ok("Complaint priority updated successfully.");
+    }
+
+    @PutMapping("/change-status")
+    public ResponseEntity<String> changeStatus(@RequestBody UpdateComplaintStatusDTO dto) {
+        complaintsService.updateComplaintStatus(dto.getComplaintId(), dto.getStatus());
+        return ResponseEntity.ok("Complaint status updated successfully.");
     }
 }

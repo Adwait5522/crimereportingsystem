@@ -9,6 +9,8 @@ import com.sunbeam.dto.ComplaintRespDTO2;
 import com.sunbeam.dto.ComplaintResponseDTO;
 import com.sunbeam.dto.CreateComplaintDTO;
 import com.sunbeam.dto.UpdateComplaintDTO;
+import com.sunbeam.entities.Priority;
+import com.sunbeam.entities.Status;
 
 public interface ComplaintsService {
 	 String updateStatus(Long complaintId, String newStatus);
@@ -36,4 +38,9 @@ public interface ComplaintsService {
 	ComplaintRespDTO getComplaintsById(Long id);
 
 	void assignOfficer(Long complaintId, Long officerId);
+	
+	 void updateComplaintPriority(Long complaintId, Priority priority);
+	 
+	 void updateComplaintStatus(Long complaintId, Status status);
+
 }

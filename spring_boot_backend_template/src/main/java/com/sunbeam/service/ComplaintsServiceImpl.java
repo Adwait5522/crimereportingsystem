@@ -300,6 +300,26 @@ public class ComplaintsServiceImpl implements ComplaintsService {
 	        complaintsDao.save(complaint);
 		
 	}
+	
+	 @Override
+	    public void updateComplaintPriority(Long complaintId, Priority priority) {
+	        Complaints complaint = complaintsDao.findById(complaintId)
+	                .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + complaintId));
+
+	        complaint.setPriority(priority);
+	        complaintsDao.save(complaint);
+	    }
+
+	    @Override
+	    public void updateComplaintStatus(Long complaintId, Status status) {
+	        Complaints complaint = complaintsDao.findById(complaintId)
+	                .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + complaintId));
+
+	        complaint.setStatus(status);
+	        complaintsDao.save(complaint);
+	    }
+	
+	
 
 
 }

@@ -23,4 +23,6 @@ public interface ComplaintsDao extends JpaRepository<Complaints, Long> {
 	List<Complaints> findByPoliceStationId(PoliceStation station);
 	List<Complaints> findByOfficerOfficerId(Long officerId);
 	
+	
+	
 }
