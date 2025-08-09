@@ -367,6 +367,7 @@ const OfficerLogin = () => {
         localStorage.setItem("officerId", officerId);
         localStorage.setItem("designationId", data.designationId);
         localStorage.setItem("loginMessage", data.message);
+        localStorage.setItem("officerName", data.officerName);
 
         if (rememberMe) {
           localStorage.setItem("rememberedBadgeId", badgeId);
