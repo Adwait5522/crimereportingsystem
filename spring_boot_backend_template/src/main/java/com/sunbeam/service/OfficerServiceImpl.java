@@ -71,8 +71,8 @@ public class OfficerServiceImpl implements OfficerService {
         }
 
         Long designationId = login.getOfficer().getDesignation().getDesignationId(); // ✅ extract designation ID
-
-        return new OfficerLoginRespDTO("Login Successful!", designationId);
+        String officerName = login.getOfficer().getOfficerName();
+        return new OfficerLoginRespDTO("Login Successful!", designationId,officerName);
     }
     
 //    @Override

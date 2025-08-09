@@ -57,7 +57,7 @@ public class FeedBackServiceImpl implements FeedBackService{
 	    FetchFeedbackDTO dto = new FetchFeedbackDTO();
 	    dto.setFeedBackId(feedback.getFeedbackId());
 	    dto.setComplaintId(feedback.getComplaint().getComplaintId());
-	    dto.setPoliceStationId(feedback.getComplaint().getPoliceStation().getPoliceStationId()); // Fetch from complaint
+	    dto.setPoliceStationId(feedback.getComplaint().getPoliceStationId().getPoliceStationId()); // Fetch from complaint
 	    dto.setRating(feedback.getRating());
 	    dto.setComments(feedback.getComments());
 	    return dto;
