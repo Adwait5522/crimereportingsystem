@@ -44,7 +44,7 @@ const FeedBackComplaints = () => {
             <thead>
               <tr>
                 <th>Complaint ID</th>
-                <th>User ID</th>
+                <th>Police Station ID</th>
                 <th>Rating</th>
                 <th>Comments</th>
                 <th>Action</th>
@@ -59,7 +59,7 @@ const FeedBackComplaints = () => {
                 feedbacks.map((fb) => (
                   <tr key={fb.feedBackId}>
                     <td>{fb.complaintId}</td>
-                    <td>{fb.userId}</td>
+                    <td>{fb.policeStationId}</td>
                     <td>{fb.rating}</td>
                     <td>{fb.comments}</td>
                     <td>
