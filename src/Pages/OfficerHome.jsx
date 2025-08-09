@@ -13,6 +13,8 @@ const OfficerHome = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [cases, setCases] = useState([]);
   const [filteredCases, setFilteredCases] = useState([]);
+  const [editValues, setEditValues] = useState({}); // complaintId -> { status, priority }
+  const [loadingMap, setLoadingMap] = useState({}); // complaintId -> loading state
 
   useEffect(() => {
     if (!loggedInOfficerId) {
@@ -30,10 +32,22 @@ const OfficerHome = () => {
           complaintType: item.complaintType,
           city: item.city,
           state: item.state,
-          status: capitalize(item.status),
-          priority: capitalize(item.priority),
+          status: item.status.toUpperCase(),
+          priority: item.priority.toUpperCase(),
         }));
+
+        // Set cases
         setCases(complaints);
+
+        // Prepare editable values
+        const initEdit = {};
+        complaints.forEach((c) => {
+          initEdit[c.complaintId] = {
+            status: c.status,
+            priority: c.priority,
+          };
+        });
+        setEditValues(initEdit);
       })
       .catch((err) => console.error("Error fetching complaints:", err));
   }, [loggedInOfficerId]);
@@ -41,16 +55,12 @@ const OfficerHome = () => {
   useEffect(() => {
     let officerCases = [...cases];
     if (statusFilter !== "All") {
-      officerCases = officerCases.filter((c) => c.status === statusFilter);
+      officerCases = officerCases.filter(
+        (c) => c.status === statusFilter.toUpperCase()
+      );
     }
     setFilteredCases(officerCases);
   }, [cases, statusFilter]);
-
-  const handleStatusChange = (caseId, newStatus) => {
-    setCases((prevCases) =>
-      prevCases.map((c) => (c.id === caseId ? { ...c, status: newStatus } : c))
-    );
-  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -59,6 +69,57 @@ const OfficerHome = () => {
 
   const goToCaseDetails = (complaintId) => {
     navigate(`/case/${complaintId}`);
+  };
+
+  const handleChange = (complaintId, field, value) => {
+    setEditValues((prev) => ({
+      ...prev,
+      [complaintId]: { ...prev[complaintId], [field]: value },
+    }));
+  };
+
+  const handleSubmit = async (complaintId) => {
+    const edit = editValues[complaintId];
+    if (!edit) {
+      alert("Nothing to submit.");
+      return;
+    }
+
+    const newStatus = edit.status.toUpperCase();
+    const newPriority = edit.priority.toUpperCase();
+    const idInt = Number(complaintId);
+
+    setLoadingMap((prev) => ({ ...prev, [complaintId]: true }));
+
+    try {
+      // Change status
+      await axios.put(`http://localhost:8080/complaints/change-status`, {
+        complaintId: idInt,
+        status: newStatus,
+      });
+
+      // Change priority
+      await axios.put(`http://localhost:8080/complaints/change-priority`, {
+        complaintId: idInt,
+        priority: newPriority,
+      });
+
+      // Update UI immediately
+      setCases((prev) =>
+        prev.map((c) =>
+          c.complaintId === complaintId
+            ? { ...c, status: newStatus, priority: newPriority }
+            : c
+        )
+      );
+
+      alert(`Complaint ${complaintId} updated successfully.`);
+    } catch (error) {
+      console.error("Error updating complaint:", error);
+      alert(`Failed to update complaint ${complaintId}.`);
+    } finally {
+      setLoadingMap((prev) => ({ ...prev, [complaintId]: false }));
+    }
   };
 
   return (
@@ -79,10 +140,10 @@ const OfficerHome = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Investigating">Investigating</option>
-            <option value="Resolved">Resolved</option>
-            <option value="Rejected">Rejected</option>
+            <option value="PENDING">Pending</option>
+            <option value="INVESTIGATING">Investigating</option>
+            <option value="RESOLVED">Resolved</option>
+            <option value="REJECTED">Rejected</option>
           </select>
         </div>
 
@@ -95,7 +156,10 @@ const OfficerHome = () => {
                 <th>Complaint Type</th>
                 <th>City</th>
                 <th>Status</th>
-                <th>Edit Status</th>
+                <th>Priority</th>
+                <th>Change Status</th>
+                <th>Change Priority</th>
+                <th>Submit</th>
               </tr>
             </thead>
             <tbody>
@@ -113,28 +177,49 @@ const OfficerHome = () => {
                   <td>{c.title}</td>
                   <td>{c.complaintType}</td>
                   <td>{c.city}</td>
-                  <td>
-                    <span
-                      className={`case-status-badge bg-${getStatusColor(
-                        c.status
-                      )}`}
-                    >
-                      {c.status}
-                    </span>
-                  </td>
+                  <td>{c.status}</td>
+                  <td>{c.priority}</td>
+
+                  {/* Change Status dropdown */}
                   <td>
                     <select
                       className="status-filter-select"
-                      value={c.status}
+                      value={editValues[c.complaintId]?.status || c.status}
                       onChange={(e) =>
-                        handleStatusChange(c.id, e.target.value)
+                        handleChange(c.complaintId, "status", e.target.value)
                       }
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="Investigating">Investigating</option>
-                      <option value="Resolved">Resolved</option>
-                      <option value="Rejected">Rejected</option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="INVESTIGATING">INVESTIGATING</option>
+                      <option value="RESOLVED">RESOLVED</option>
+                      <option value="REJECTED">REJECTED</option>
                     </select>
+                  </td>
+
+                  {/* Change Priority dropdown */}
+                  <td>
+                    <select
+                      className="status-filter-select"
+                      value={editValues[c.complaintId]?.priority || c.priority}
+                      onChange={(e) =>
+                        handleChange(c.complaintId, "priority", e.target.value)
+                      }
+                    >
+                      <option value="LOW">LOW</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="HIGH">HIGH</option>
+                    </select>
+                  </td>
+
+                  {/* Submit button */}
+                  <td>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleSubmit(c.complaintId)}
+                      disabled={loadingMap[c.complaintId]}
+                    >
+                      {loadingMap[c.complaintId] ? "Saving..." : "Submit"}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -148,25 +233,5 @@ const OfficerHome = () => {
     </div>
   );
 };
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case "Pending":
-      return "secondary";
-    case "Investigating":
-      return "warning";
-    case "Resolved":
-      return "success";
-    case "Rejected":
-      return "danger";
-    default:
-      return "light";
-  }
-};
-
-const capitalize = (str) =>
-  str && str.length > 0
-    ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
-    : "";
 
 export default OfficerHome;

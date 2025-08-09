@@ -9,7 +9,6 @@ const InspectorHome = () => {
   const [assignedFilter, setAssignedFilter] = useState('All');
   const [officersList, setOfficersList] = useState({});
   const [stationOfficers, setStationOfficers] = useState([]);
-  const [editValues, setEditValues] = useState({});
   const navigate = useNavigate();
 
   const inspectorId = localStorage.getItem('officerId');
@@ -21,12 +20,6 @@ const InspectorHome = () => {
         .get(`http://localhost:8080/officers/inspectors/${inspectorId}/station-complaints`)
         .then((res) => {
           const complaintsData = res.data;
-
-          const initEdit = {};
-          complaintsData.forEach(c => {
-            initEdit[c.complaintId] = { status: c.status, priority: c.priority };
-          });
-          setEditValues(initEdit);
 
           const officerIds = complaintsData
             .filter(c => c.officerId !== null)
@@ -79,39 +72,6 @@ const InspectorHome = () => {
       .catch(err => console.error('Error assigning officer:', err));
   };
 
-  const handleChange = (complaintId, field, value) => {
-    setEditValues(prev => ({
-      ...prev,
-      [complaintId]: { ...prev[complaintId], [field]: value }
-    }));
-  };
-
-  const handleSubmit = (complaintId) => {
-    const { status, priority } = editValues[complaintId];
-
-    axios.put(`http://localhost:8080/complaints/change-status`, {
-      complaintId,
-      status
-    })
-    .then(() => {
-      axios.put(`http://localhost:8080/complaints/change-priority`, {
-        complaintId,
-        priority
-      })
-      .then(() => {
-        alert(`Complaint ${complaintId} updated successfully!`);
-      })
-      .catch(err => {
-        console.error('Error updating priority:', err);
-        alert(`Failed to update priority for complaint ${complaintId}`);
-      });
-    })
-    .catch(err => {
-      console.error('Error updating status:', err);
-      alert(`Failed to update status for complaint ${complaintId}`);
-    });
-  };
-
   return (
     <>
       <Header />
@@ -138,7 +98,6 @@ const InspectorHome = () => {
               <th>Status</th>
               <th>Priority</th>
               <th>Officer</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -154,30 +113,8 @@ const InspectorHome = () => {
                 <td>{c.description}</td>
                 <td>{c.city}</td>
                 <td>{c.state}</td>
-
-                <td>
-                  <select
-                    value={editValues[c.complaintId]?.status || c.status}
-                    onChange={(e) => handleChange(c.complaintId, 'status', e.target.value)}
-                  >
-                    <option value="PENDING">PENDING</option>
-                    <option value="INVESTIGATING">INVESTIGATING</option>
-                    <option value="RESOLVED">RESOLVED</option>
-                    <option value="REJECTED">REJECTED</option>
-                  </select>
-                </td>
-
-                <td>
-                  <select
-                    value={editValues[c.complaintId]?.priority || c.priority}
-                    onChange={(e) => handleChange(c.complaintId, 'priority', e.target.value)}
-                  >
-                    <option value="LOW">LOW</option>
-                    <option value="MEDIUM">MEDIUM</option>
-                    <option value="HIGH">HIGH</option>
-                  </select>
-                </td>
-
+                <td>{c.status}</td>
+                <td>{c.priority}</td>
                 <td>
                   {c.officerId ? (
                     officersList[c.officerId] || 'Loading...'
@@ -194,10 +131,6 @@ const InspectorHome = () => {
                       ))}
                     </select>
                   )}
-                </td>
-
-                <td>
-                  <button onClick={() => handleSubmit(c.complaintId)}>Submit</button>
                 </td>
               </tr>
             ))}
