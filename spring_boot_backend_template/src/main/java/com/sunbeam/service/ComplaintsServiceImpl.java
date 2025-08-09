@@ -131,10 +131,10 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     }
     
     @Override
-	public String deleteCompliant(Long complaint_id) {
+    public String deleteCompliant(Long complaint_id) {
 		// TODO Auto-generated method stub
 		Complaints complaint = complaintsDao.findById(complaint_id).orElseThrow(()->new ResourceNotFoundException("Invalid Complaint ID !!!!"));
-		complaint.setStatus(Status.REJECTED);
+		complaint.setStatus(Status.DELETED);
 		complaintsDao.save(complaint);
 		
 		return "soft deleted complaint details";

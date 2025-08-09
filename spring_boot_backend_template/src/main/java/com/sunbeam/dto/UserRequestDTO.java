@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class UserRequestDTO extends BaseDTO{
+public class UserRequestDTO{
 
 		@NotBlank
 	    @Size(max = 255)
@@ -45,9 +45,9 @@ public class UserRequestDTO extends BaseDTO{
 	    @NotNull(message = "Gender is required")
 	    private Gender gender;
 
-
-	    
-	    @JsonProperty("created_on")
-	    private LocalDate createdOn;
+//
+//	    
+//	    @JsonProperty("created_on")
+//	    private LocalDate createdOn;
 
 }

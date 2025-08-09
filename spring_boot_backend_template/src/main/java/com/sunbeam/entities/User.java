@@ -84,7 +84,7 @@ public class User{
 	}
 	
 	 @Column(name = "created_on", updatable = false)
-	    private LocalDateTime createdOn;
+	    private LocalDateTime createdOn = LocalDateTime.now();
 	
 	
 }
