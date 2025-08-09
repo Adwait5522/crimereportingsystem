@@ -18,7 +18,7 @@ const ComplaintPage = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/complaints/user/1`)
+    axios.get(`http://localhost:8080/complaints/user/${storedUserId}`)
       .then(response => setComplaints(response.data))
       .catch(error => console.error('Error fetching complaints:', error));
   }, [navigate]);
