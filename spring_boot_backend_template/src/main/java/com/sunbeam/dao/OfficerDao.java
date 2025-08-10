@@ -13,6 +13,8 @@ public interface OfficerDao extends JpaRepository<Officer, Long> {
     List<Officer> findByDesignationDesignationNameIgnoreCase(String designationName);
     List<Officer> findByPoliceStation(PoliceStation station);
 //    List<Officer> findByPoliceStationIsNull();
-    List<Officer> findByPoliceStationIsNullAndDesignationDesignationId(Long designationId);
+//    List<Officer> findByPoliceStationIsNullAndDesignationDesignationId(Long designationId);
+    List<Officer> findByPoliceStationIsNullAndDesignationDesignationName(String designationName);
+
 
 }

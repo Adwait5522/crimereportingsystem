@@ -288,10 +288,28 @@ public class OfficerServiceImpl implements OfficerService {
 	                .collect(Collectors.toList());
 	}
 	
+//	@Override
+//	public List<OfficerRespDTO> getUnassignedOfficers() {
+//	    Long designationId = 2L; // Station Incharge ID
+//	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationId(designationId);
+//
+//	    return unassigned.stream()
+//	            .map(officer -> {
+//	                OfficerRespDTO dto = new OfficerRespDTO();
+//	                dto.setOfficerId(officer.getOfficerId());
+//	                dto.setOfficerName(officer.getOfficerName());
+//	                dto.setDesignation(officer.getDesignation().getDesignationName());
+//	                dto.setPoliceStationName("Not Assigned");
+//	                dto.setStatus(officer.getActiveStatus().toString());
+//	                return dto;
+//	            })
+//	            .collect(Collectors.toList());
+//	}
+	
 	@Override
 	public List<OfficerRespDTO> getUnassignedOfficers() {
-	    Long designationId = 2L; // Station Incharge ID
-	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationId(designationId);
+	    String designationName = "investigating_officer"; // designation name filter
+	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationName(designationName);
 
 	    return unassigned.stream()
 	            .map(officer -> {
@@ -305,6 +323,7 @@ public class OfficerServiceImpl implements OfficerService {
 	            })
 	            .collect(Collectors.toList());
 	}
+
 	
 	@Override
 	public String assignStationToOfficer(Long officerId, Long policeStationId) {
