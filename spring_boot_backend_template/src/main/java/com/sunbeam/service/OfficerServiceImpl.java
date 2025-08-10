@@ -306,23 +306,43 @@ public class OfficerServiceImpl implements OfficerService {
 //	            .collect(Collectors.toList());
 //	}
 	
+//	@Override
+//	public List<OfficerRespDTO> getUnassignedOfficers() {
+//	    String designationName = "investigating_officer"; // designation name filter
+//	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationName(designationName);
+//
+//	    return unassigned.stream()
+//	            .map(officer -> {
+//	                OfficerRespDTO dto = new OfficerRespDTO();
+//	                dto.setOfficerId(officer.getOfficerId());
+//	                dto.setOfficerName(officer.getOfficerName());
+//	                dto.setDesignation(officer.getDesignation().getDesignationName());
+//	                dto.setPoliceStationName("Not Assigned");
+//	                dto.setStatus(officer.getActiveStatus().toString());
+//	                return dto;
+//	            })
+//	            .collect(Collectors.toList());
+//	}
+	
 	@Override
 	public List<OfficerRespDTO> getUnassignedOfficers() {
-	    String designationName = "investigating_officer"; // designation name filter
-	    List<Officer> unassigned = officerDao.findByPoliceStationIsNullAndDesignationDesignationName(designationName);
+	    Long excludedDesignationId = 1L; // Exclude designation_id = 1
+	    List<Officer> officers = officerDao.findByPoliceStationIsNullAndDesignationDesignationIdNot(excludedDesignationId);
 
-	    return unassigned.stream()
+	    return officers.stream()
 	            .map(officer -> {
 	                OfficerRespDTO dto = new OfficerRespDTO();
 	                dto.setOfficerId(officer.getOfficerId());
 	                dto.setOfficerName(officer.getOfficerName());
 	                dto.setDesignation(officer.getDesignation().getDesignationName());
-	                dto.setPoliceStationName("Not Assigned");
+	                dto.setPoliceStationName("Not Assigned"); // Always null here
 	                dto.setStatus(officer.getActiveStatus().toString());
 	                return dto;
 	            })
 	            .collect(Collectors.toList());
 	}
+
+
 
 	
 	@Override

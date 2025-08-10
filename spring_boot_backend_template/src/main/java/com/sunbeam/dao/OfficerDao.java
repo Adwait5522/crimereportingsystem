@@ -14,7 +14,9 @@ public interface OfficerDao extends JpaRepository<Officer, Long> {
     List<Officer> findByPoliceStation(PoliceStation station);
 //    List<Officer> findByPoliceStationIsNull();
 //    List<Officer> findByPoliceStationIsNullAndDesignationDesignationId(Long designationId);
-    List<Officer> findByPoliceStationIsNullAndDesignationDesignationName(String designationName);
+//    List<Officer> findByPoliceStationIsNullAndDesignationDesignationName(String designationName);
+    List<Officer> findByPoliceStationIsNullAndDesignationDesignationIdNot(Long designationId);
+
 
 
 }
