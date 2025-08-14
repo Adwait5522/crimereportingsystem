@@ -1,0 +1,135 @@
+package com.sunbeam.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.sunbeam.custom_exceptions.ResourceNotFoundException;
+import com.sunbeam.dto.ApiResponse;
+import com.sunbeam.dto.ComplaintReqDTO;
+import com.sunbeam.dto.ComplaintRespDTO;
+import com.sunbeam.dto.ComplaintResponseDTO;
+import com.sunbeam.dto.PriorityUpdateDTO;
+import com.sunbeam.dto.StatusUpdateDTO;
+import com.sunbeam.dto.UpdateComplaintDTO;
+import com.sunbeam.dto.UpdateComplaintPriorityDTO;
+import com.sunbeam.dto.UpdateComplaintStatusDTO;
+import com.sunbeam.service.ComplaintsService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
+
+@RestController
+@RequestMapping("/complaints")
+@AllArgsConstructor
+public class ComplaintsController {
+
+    private final ComplaintsService complaintsService;
+
+//    @PutMapping("/{id}/status")
+//    public ResponseEntity<?> updateStatus(@PathVariable Integer id, @RequestBody StatusUpdateDTO dto) {
+//        try {
+//            String msg = complaintsService.updateStatus(id, dto.getStatus());
+//            return ResponseEntity.ok(new ApiResponse(msg));
+//        } catch (ResourceNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
+//        }
+//    }
+    
+    @PostMapping("/{complaint_id}")
+	@Operation(description = "Update complaint details")
+	public ResponseEntity<?> updateComplaints(@PathVariable Long complaint_id, @RequestBody UpdateComplaintDTO dto) 
+	{
+		System.out.println("in update "+complaint_id+" "+dto);
+		return ResponseEntity.ok(complaintsService.updateDetails(complaint_id,dto));
+	}
+    
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllComplaints() {
+        try {
+            List<ComplaintRespDTO> complaints = complaintsService.getComplaints();
+            return ResponseEntity.ok(complaints);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
+        }
+    }
+
+    
+    @PutMapping("/{id}/priority")
+    public ResponseEntity<?> updatePriority(@PathVariable Long id, @RequestBody PriorityUpdateDTO dto) {
+        try {
+            String msg = complaintsService.updatePriority(id, dto.getPriority());
+            return ResponseEntity.ok(new ApiResponse(msg));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(new ApiResponse("Invalid priority value. Use LOW, MEDIUM, or HIGH."));
+        }
+    }
+    
+    @GetMapping("/station/{id}")
+    public ResponseEntity<?> getComplaintsByStation(@PathVariable Long id) {
+        List<ComplaintRespDTO> list = complaintsService.getComplaintsByPoliceStationId(id);
+        return ResponseEntity.ok(list);
+    }
+    
+    @PostMapping("/register")
+    public ResponseEntity<?> registerComplaint(@RequestBody ComplaintReqDTO dto) {
+        String msg = complaintsService.registerComplaint(dto);
+        return ResponseEntity.ok(new ApiResponse(msg));
+    }
+    
+    @DeleteMapping("/{complaint_id}")
+	public ResponseEntity<?> deleteComplaints(@PathVariable Long complaint_id)
+	{
+		System.out.println("in delete "+complaint_id);
+		return ResponseEntity.ok(complaintsService.deleteCompliant(complaint_id));
+	}
+    
+    @GetMapping("/user/{userId}")
+	public ResponseEntity<List<ComplaintResponseDTO>> getComplaintsByUserId(@PathVariable Long userId) {
+	    List<ComplaintResponseDTO> complaints = complaintsService.getComplaintsByUserId(userId);
+
+	    if (complaints.isEmpty()) {
+	        return ResponseEntity.noContent().build();
+	    }
+
+	    return ResponseEntity.ok(complaints);
+	}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getComplaintsById(@PathVariable Long id) {
+        ComplaintRespDTO complaint = complaintsService.getComplaintsById(id);
+        return ResponseEntity.ok(complaint);
+    }
+    @PutMapping("/{complaintId}/assign/{officerId}")
+    public ResponseEntity<String> assignOfficerToComplaint(
+            @PathVariable Long complaintId,
+            @PathVariable Long officerId) {
+        	complaintsService.assignOfficer(complaintId, officerId);
+        return ResponseEntity.ok("Officer assigned successfully.");
+    }
+    
+    
+    
+    
+    @PutMapping("/change-priority")
+    public ResponseEntity<String> changePriority(@RequestBody UpdateComplaintPriorityDTO dto) {
+        complaintsService.updateComplaintPriority(dto.getComplaintId(), dto.getPriority());
+        return ResponseEntity.ok("Complaint priority updated successfully.");
+    }
+
+    @PutMapping("/change-status")
+    public ResponseEntity<String> changeStatus(@RequestBody UpdateComplaintStatusDTO dto) {
+        complaintsService.updateComplaintStatus(dto.getComplaintId(), dto.getStatus());
+        return ResponseEntity.ok("Complaint status updated successfully.");
+    }
+}
