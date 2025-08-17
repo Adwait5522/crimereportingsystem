@@ -4,6 +4,8 @@ import axios from "axios";
 import "../styles/HeadquarterLogin.css";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function HeadquarterLogin() {
   const [officerId, setOfficerId] = useState("");
@@ -45,7 +47,10 @@ function HeadquarterLogin() {
     if (validateForm()) {
       const match = officerId.match(/^HQ(\d{1,4})$/i);
       if (!match) {
-        setApiError("Invalid Officer ID format.");
+        const errMsg = "Invalid Officer ID format.";
+        setApiError(errMsg);
+        toast.error(errMsg);
+        // alert(errMsg);
         return;
       }
 
@@ -70,10 +75,17 @@ function HeadquarterLogin() {
           localStorage.removeItem("rememberedHqOfficerId");
         }
 
+        const successMsg = `Welcome ${adminName}!`;
+        toast.success(successMsg);
+        // alert(successMsg);
+
         navigate("/headquarter-home");
       } catch (error) {
         console.error("Login failed:", error);
-        setApiError("Invalid Officer ID or Password.");
+        const errMsg = "Invalid Officer ID or Password.";
+        setApiError(errMsg);
+        toast.error(errMsg);
+        // alert(errMsg);
       }
     }
   };
@@ -146,6 +158,7 @@ function HeadquarterLogin() {
         </div>
       </div>
       <Footer />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

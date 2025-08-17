@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import "../styles/OfficerHome.css";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const OfficerHome = () => {
   const navigate = useNavigate();
@@ -36,10 +38,8 @@ const OfficerHome = () => {
           priority: item.priority.toUpperCase(),
         }));
 
-        // Set cases
         setCases(complaints);
 
-        // Prepare editable values
         const initEdit = {};
         complaints.forEach((c) => {
           initEdit[c.complaintId] = {
@@ -81,7 +81,7 @@ const OfficerHome = () => {
   const handleSubmit = async (complaintId) => {
     const edit = editValues[complaintId];
     if (!edit) {
-      alert("Nothing to submit.");
+      toast.error("Nothing to submit.");
       return;
     }
 
@@ -113,10 +113,10 @@ const OfficerHome = () => {
         )
       );
 
-      alert(`Complaint ${complaintId} updated successfully.`);
+      toast.success(`Complaint ${complaintId} updated successfully.`);
     } catch (error) {
       console.error("Error updating complaint:", error);
-      alert(`Failed to update complaint ${complaintId}.`);
+      toast.error(`Failed to update complaint ${complaintId}.`);
     } finally {
       setLoadingMap((prev) => ({ ...prev, [complaintId]: false }));
     }
@@ -158,7 +158,7 @@ const OfficerHome = () => {
                 <th>Status</th>
                 <th>Priority</th>
                 <th>Change Status</th>
-                <th>Change Priority</th>
+                <th>Priority</th>
                 <th>Submit</th>
               </tr>
             </thead>
@@ -198,17 +198,7 @@ const OfficerHome = () => {
 
                   {/* Change Priority dropdown */}
                   <td>
-                    <select
-                      className="status-filter-select"
-                      value={editValues[c.complaintId]?.priority || c.priority}
-                      onChange={(e) =>
-                        handleChange(c.complaintId, "priority", e.target.value)
-                      }
-                    >
-                      <option value="LOW">LOW</option>
-                      <option value="MEDIUM">MEDIUM</option>
-                      <option value="HIGH">HIGH</option>
-                    </select>
+                    {c.priority}
                   </td>
 
                   {/* Submit button */}
@@ -230,6 +220,7 @@ const OfficerHome = () => {
         )}
       </div>
       <Footer />
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

@@ -278,8 +278,8 @@ const ComplaintPage = () => {
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (!storedUserId) {
-      console.error("No userId found in localStorage. Redirecting to login.");
-      navigate('/user_login');
+      // console.error("No userId found in localStorage. Redirecting to login.");
+      navigate('/user-login');
       return;
     }
 

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../styles/AddOfficerForm.css"; // Reuse the same CSS
+import "../styles/AddOfficerForm.css"; 
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddDesignationForm = () => {
   const [designationName, setDesignationName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,19 +18,25 @@ const AddDesignationForm = () => {
       .toLowerCase()
       .replace(/\s+/g, "_");
 
-    const payload = {
-      designationName: transformedName,
-    };
+    const payload = { designationName: transformedName };
 
-    console.log("Payload being sent to backend:", payload); // ✅ DEBUG LOG
+    setLoading(true); // start loader
 
     try {
       await axios.post("http://localhost:8080/designation", payload);
-      alert("Designation added successfully!");
-      setDesignationName("");
+      
+      toast.success("Designation added successfully!", {
+        autoClose: 3000,
+      });
+
+      setDesignationName(""); // reset input
     } catch (error) {
       console.error("Error adding designation:", error);
-      alert("Failed to add designation.");
+      toast.error("Failed to add designation.", {
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 
@@ -47,14 +56,18 @@ const AddDesignationForm = () => {
               value={designationName}
               onChange={(e) => setDesignationName(e.target.value)}
               required
+              disabled={loading} // disable input during API call
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
-            Add Designation
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Adding..." : "Add Designation"}
           </button>
         </form>
       </div>
+
+      <ToastContainer position="top-right" />
+
       <Footer />
     </>
   );

@@ -3,17 +3,20 @@ import axios from "axios";
 import "../styles/AddOfficerForm.css";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddOfficerForm = () => {
   const [form, setForm] = useState({
     officerName: "",
     designationId: "",
     policeStationId: "",
-    password: "",           // Added password state
+    password: "",
   });
 
   const [designations, setDesignations] = useState([]);
   const [stations, setStations] = useState([]);
+  const [loading, setLoading] = useState(false); // loader state
 
   useEffect(() => {
     axios
@@ -34,6 +37,7 @@ const AddOfficerForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // start loader
 
     const payload = {
       officerName: form.officerName,
@@ -42,13 +46,11 @@ const AddOfficerForm = () => {
     };
 
     try {
-      // 1. Create officer, get the new officer ID from response
+      // 1. Create officer
       const officerResponse = await axios.post("http://localhost:8080/officers", payload);
-      const newOfficerId = officerResponse.data; // assuming the server returns just the ID as string or number
+      const newOfficerId = officerResponse.data;
 
-      console.log("New officer ID:", newOfficerId);
-
-      // 2. Now add login with officerId and password
+      // 2. Add login
       const loginPayload = {
         officerId: Number(newOfficerId),
         password: form.password,
@@ -56,13 +58,14 @@ const AddOfficerForm = () => {
 
       await axios.post("http://localhost:8080/officerlogin/add-login", loginPayload);
 
-      alert("Officer and login added successfully!");
+      toast.success("Officer and login added successfully!", { autoClose: 3000 });
 
-      // Reset form after success
-      setForm({ officerName: "", designationId: "", policeStationId: "", password: "" });
+      setForm({ officerName: "", designationId: "", policeStationId: "", password: "" }); // reset form
     } catch (error) {
       console.error(error);
-      alert("Error adding officer or login.");
+      toast.error("Error adding officer or login.", { autoClose: 3000 });
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 
@@ -88,6 +91,7 @@ const AddOfficerForm = () => {
               value={form.officerName}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -99,6 +103,7 @@ const AddOfficerForm = () => {
               onChange={handleChange}
               value={form.designationId}
               required
+              disabled={loading}
             >
               <option value="">Select Designation</option>
               {designations.map((des) => (
@@ -109,7 +114,7 @@ const AddOfficerForm = () => {
             </select>
           </div>
 
-          {/* If you want to enable police station select again, just uncomment */}
+          {/* Uncomment if police station selection is required */}
           {/* <div className="mb-3">
             <label className="form-label">Police Station</label>
             <select
@@ -117,13 +122,11 @@ const AddOfficerForm = () => {
               className="form-control"
               onChange={handleChange}
               value={form.policeStationId}
+              disabled={loading}
             >
               <option value="">Select Police Station</option>
               {stations.map((station) => (
-                <option
-                  key={station.policeStationId}
-                  value={station.policeStationId.toString()}
-                >
+                <option key={station.policeStationId} value={station.policeStationId.toString()}>
                   {capitalize(station.policeStationName)}
                 </option>
               ))}
@@ -140,14 +143,18 @@ const AddOfficerForm = () => {
               value={form.password}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
-            Add Officer
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Adding..." : "Add Officer"}
           </button>
         </form>
       </div>
+
+      <ToastContainer position="top-right" />
+
       <Footer />
     </>
   );

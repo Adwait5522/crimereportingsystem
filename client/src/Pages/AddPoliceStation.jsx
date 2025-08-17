@@ -4,6 +4,8 @@ import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import { useNavigate } from 'react-router-dom';
 import "../styles/AddPoliceStation.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddPoliceStation = () => {
   const [investigatingOfficers, setInvestigatingOfficers] = useState([]);
@@ -13,6 +15,7 @@ const AddPoliceStation = () => {
     pincode: "",
     mapLink: ""
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,20 +37,21 @@ const AddPoliceStation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!selectedOfficerId) {
-      alert("Please select a Station Incharge.");
+      toast.warn("Please select a Station Incharge.", { autoClose: 3000 });
       return;
     }
+
+    setLoading(true);
 
     try {
       // 1️⃣ Get latitude & longitude from pincode
       const geoRes = await axios.get("http://localhost:8080/api/location/search", {
-      params: { postalcode: stationForm.pincode }
-    });
+        params: { postalcode: stationForm.pincode }
+      });
 
       if (!geoRes.data.length) {
-        alert("Could not find location for the given pincode.");
+        toast.error("Could not find location for the given pincode.", { autoClose: 3000 });
         return;
       }
 
@@ -71,20 +75,24 @@ const AddPoliceStation = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const stationId = createRes.data; // backend returns Long
-      console.log("Created Station ID:", stationId);
+      const stationId = createRes.data;
 
       // 4️⃣ Assign station to officer
       await axios.patch(
         `http://localhost:8080/officers/assign-station?officerId=${selectedOfficerId}&stationId=${stationId}`
       );
 
-      alert("Police station added and assigned to officer successfully!");
+      toast.success("Police station added and assigned successfully!", { autoClose: 3000 });
+      setStationForm({ name: "", pincode: "", mapLink: "" });
+      setSelectedOfficerId("");
       navigate("/headquarter-home");
+      
 
     } catch (error) {
       console.error("Error processing request:", error);
-      alert("Something went wrong while adding the station and assigning officer.");
+      toast.error("Something went wrong while adding the station and assigning officer.", { autoClose: 3000 });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,6 +114,7 @@ const AddPoliceStation = () => {
               value={stationForm.name}
               onChange={handleInputChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -120,6 +129,7 @@ const AddPoliceStation = () => {
               value={stationForm.pincode}
               onChange={handleInputChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -134,6 +144,7 @@ const AddPoliceStation = () => {
               value={stationForm.mapLink}
               onChange={handleInputChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -148,6 +159,7 @@ const AddPoliceStation = () => {
               value={selectedOfficerId}
               onChange={handleOfficerChange}
               required
+              disabled={loading}
             >
               <option value="">Select Station Incharge</option>
               {investigatingOfficers.map(officer => (
@@ -159,16 +171,16 @@ const AddPoliceStation = () => {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="btn btn-primary">
-            Add Police Station
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Processing..." : "Add Police Station"}
           </button>
         </form>
       </div>
 
+      <ToastContainer position="top-right" />
       <Footer />
     </>
   );
 };
 
 export default AddPoliceStation;
-

@@ -3,29 +3,34 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import "../styles/HeadquaterHome.css";
 import Header from "../Components/Header";
-import axios from "axios"; // ⬅️ import axios
+import axios from "axios";
 
 function HeadquarterHome() {
   const navigate = useNavigate();
   const [stations, setStations] = useState([]);
   const adminName = localStorage.getItem("adminName");
 
-
-  // Fetch police station stats on mount
   useEffect(() => {
+    // Redirect if adminId is not in localStorage
+    const adminId = localStorage.getItem("adminId");
+    if (!adminId) {
+      navigate("/headquarter-login");
+      return;
+    }
+
+    // Fetch police station stats
     axios
       .get("http://localhost:8080/policestation/complaint-stats")
       .then((response) => {
-        console.log(response.data);
         setStations(response.data);
       })
       .catch((error) => {
         console.error("Error fetching station data:", error);
       });
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
-      localStorage.removeItem("adminId");
+    localStorage.removeItem("adminId");
     localStorage.removeItem("adminName");
     localStorage.removeItem("hqOfficerMessage");
     navigate("/headquarter-login");
@@ -33,6 +38,7 @@ function HeadquarterHome() {
 
   return (
     <>
+      <Header />
       <div className="officer-home-container">
         <div className="container officer-home-main">
           <div className="officer-home-header">
@@ -60,7 +66,12 @@ function HeadquarterHome() {
               </button>
             </div>
             <div className="col-6 col-sm-3">
-              <button className="btn btn-primary w-100" onClick={() => navigate("/feedback-complaints")}>Complaints</button>
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => navigate("/feedback-complaints")}
+              >
+                Complaints
+              </button>
             </div>
             <div className="col-6 col-sm-3">
               <button
@@ -70,22 +81,22 @@ function HeadquarterHome() {
                 Add Designation
               </button>
             </div>
-             <div className="col-6 col-sm-3">
-            <button
-              className="btn btn-primary w-100"
-              onClick={() => navigate("/display-officers")}
-            >
-              See Officers
-            </button>
-           </div>
-           <div className="col-6 col-sm-3">
-            <button
-              className="btn btn-primary w-100"
-              onClick={() => navigate("/assign-station")}
-            >
-              Assign Station to Officer
-            </button>
-           </div>
+            <div className="col-6 col-sm-3">
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => navigate("/display-officers")}
+              >
+                See Officers
+              </button>
+            </div>
+            <div className="col-6 col-sm-3">
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => navigate("/assign-station")}
+              >
+                Assign Station to Officer
+              </button>
+            </div>
           </div>
 
           <h4 className="mb-3">Total Police Stations</h4>

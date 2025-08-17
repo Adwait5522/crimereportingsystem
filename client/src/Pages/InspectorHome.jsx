@@ -9,13 +9,15 @@ const InspectorHome = () => {
   const [assignedFilter, setAssignedFilter] = useState('All');
   const [officersList, setOfficersList] = useState({});
   const [stationOfficers, setStationOfficers] = useState([]);
-  const navigate = useNavigate();
+  const [priorityUpdated, setPriorityUpdated] = useState({}); // track updated priorities
 
+  const navigate = useNavigate();
   const inspectorId = localStorage.getItem('officerId');
   const inspectorName = localStorage.getItem('officerName') || 'Inspector';
 
   useEffect(() => {
     if (inspectorId) {
+      // Fetch complaints
       axios
         .get(`http://localhost:8080/officers/inspectors/${inspectorId}/station-complaints`)
         .then((res) => {
@@ -25,6 +27,7 @@ const InspectorHome = () => {
             .filter(c => c.officerId !== null)
             .map(c => c.officerId);
 
+          // Fetch officer names
           Promise.all(
             officerIds.map(id =>
               axios.get(`http://localhost:8080/officers/${id}`).then(res => ({ id, name: res.data.officerName }))
@@ -41,6 +44,7 @@ const InspectorHome = () => {
         })
         .catch((err) => console.error('Error fetching complaints:', err));
 
+      // Fetch officers in the station
       axios
         .get(`http://localhost:8080/officers/officersBy/${inspectorId}`)
         .then(res => setStationOfficers(res.data))
@@ -96,7 +100,7 @@ const InspectorHome = () => {
               <th>City</th>
               <th>State</th>
               <th>Status</th>
-              <th>Priority</th>
+              <th>Change Priority</th>
               <th>Officer</th>
             </tr>
           </thead>
@@ -114,7 +118,34 @@ const InspectorHome = () => {
                 <td>{c.city}</td>
                 <td>{c.state}</td>
                 <td>{c.status}</td>
-                <td>{c.priority}</td>
+                <td>
+                  <select
+                    value={c.priority}
+                    disabled={priorityUpdated[c.complaintId]} // freeze after update
+                    onChange={(e) => {
+                      const newPriority = e.target.value;
+                      axios
+                        .put(`http://localhost:8080/complaints/${c.complaintId}/priority`, {
+                          priority: newPriority,
+                        })
+                        .then(() => {
+                          setComplaints((prev) =>
+                            prev.map((complaint) =>
+                              complaint.complaintId === c.complaintId
+                                ? { ...complaint, priority: newPriority }
+                                : complaint
+                            )
+                          );
+                          setPriorityUpdated((prev) => ({ ...prev, [c.complaintId]: true }));
+                        })
+                        .catch((err) => console.error('Error updating priority:', err));
+                    }}
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </td>
                 <td>
                   {c.officerId ? (
                     officersList[c.officerId] || 'Loading...'

@@ -49,7 +49,8 @@ import "./App.css";
 import { useNavigate } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // Import background images
 import img1 from "./assets/indian-logo-satyamev-jayate.png";
 import img2 from "./assets/Supreme-Court-of-India.jpg";
@@ -62,6 +63,7 @@ function App() {
   return (
     <>
       <Header />
+       <ToastContainer position="top-right" autoClose={3000} />
       <div className="app-container">
 
         {/* Background Slideshow */}
