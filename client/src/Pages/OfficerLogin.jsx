@@ -134,7 +134,7 @@ const OfficerLogin = () => {
             </div>
 
             {/* Remember Me + Forgot Password */}
-            <div className="form-options">
+            {/* <div className="form-options">
               <div className="form-check">
                 <input
                   className="form-check-input"
@@ -150,7 +150,7 @@ const OfficerLogin = () => {
               <a href="/forgot-password" className="text-primary">
                 Forgot Password?
               </a>
-            </div>
+            </div> */}
 
             {/* Submit */}
             <button

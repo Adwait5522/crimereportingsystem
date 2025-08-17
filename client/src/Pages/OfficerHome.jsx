@@ -17,12 +17,18 @@ const OfficerHome = () => {
   const [filteredCases, setFilteredCases] = useState([]);
   const [editValues, setEditValues] = useState({}); // complaintId -> { status, priority }
   const [loadingMap, setLoadingMap] = useState({}); // complaintId -> loading state
+  const [isLoading, setIsLoading] = useState(true); // For preventing flash before redirect
 
+  // Redirect if not logged in
   useEffect(() => {
     if (!loggedInOfficerId) {
-      console.error("No officer ID found in localStorage.");
-      return;
+      navigate("/officer-login");
     }
+  }, [loggedInOfficerId, navigate]);
+
+  // Fetch complaints
+  useEffect(() => {
+    if (!loggedInOfficerId) return;
 
     axios
       .get(`http://localhost:8080/officers/${loggedInOfficerId}/complaints`)
@@ -48,10 +54,15 @@ const OfficerHome = () => {
           };
         });
         setEditValues(initEdit);
+        setIsLoading(false);
       })
-      .catch((err) => console.error("Error fetching complaints:", err));
+      .catch((err) => {
+        console.error("Error fetching complaints:", err);
+        setIsLoading(false);
+      });
   }, [loggedInOfficerId]);
 
+  // Filter cases by status
   useEffect(() => {
     let officerCases = [...cases];
     if (statusFilter !== "All") {
@@ -121,6 +132,10 @@ const OfficerHome = () => {
       setLoadingMap((prev) => ({ ...prev, [complaintId]: false }));
     }
   };
+
+  if (isLoading) {
+    return <p>Loading complaints...</p>;
+  }
 
   return (
     <div className="officer-home-container">
